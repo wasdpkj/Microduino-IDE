@@ -197,9 +197,14 @@ void IRsend::enableIROut(int khz) {
   // Disable the Timer2 Interrupt (which is used for receiving IR)
   TIMSK2 &= ~_BV(TOIE2); //Timer2 Overflow Interrupt
   
+#if defined(__AVR_ATmega644P__) || defined(__AVR_ATmega1284P__)
+  pinMode(8, OUTPUT);
+  digitalWrite(8, LOW); // When not sending PWM, we want it low
+#else 
   pinMode(3, OUTPUT);
   digitalWrite(3, LOW); // When not sending PWM, we want it low
-  
+#endif
+
   // COM2A = 00: disconnect OC2A
   // COM2B = 00: disconnect OC2B; to send signal set to 10: OC2B non-inverted
   // WGM2 = 101: phase-correct PWM with OCRA as top
