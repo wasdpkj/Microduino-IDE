@@ -1,5 +1,5 @@
 Microduino Arduino IDE 配置包历史：
-*2015年2月14日，Update hardware file, Makes atmega32u4 Analog I/O increased to 10: add D8 (A8), D9 (A9), D3 (A10), D4 (A11)
+*2015年2月14日，更新了atmega32u4的Analog I/O，扩增为10个：新增D8(A8),D9(A9),D3(A10),D4(A11)
 *2014年10月19日，更新了atmega32u4的bootloader文件，解决了D10管脚作为RX_LED引起的BUG
 *2014年10月17日，更新了HID.cpp文件，解决了atmega32u4不能作为鼠标、键盘的BUG
 *2014年10月10日，更新了因为缺少avr-libc文件夹导致atmega32u4的一些BUG问题。
