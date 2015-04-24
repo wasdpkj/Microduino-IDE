@@ -78,7 +78,7 @@ const static uint8_t A7 = 21;
 
 // A majority of the pins are NOT PCINTs, SO BE WARNED (i.e. you cannot use them as receive pins)
 // Only pins available for RECEIVE (TRANSMIT can be on any pin):
-// Pins: 0, 8, 9, 10, 11, 12, 13
+// Pins: 0, 7, 8, 9, 10, 11, 12, 13
 
 #define digitalPinToPCICR(p)    ( ((((p) >= 7) && ((p) <= 13)) || \
                                   ((p) == 0) ) ? \
@@ -137,8 +137,8 @@ const uint16_t PROGMEM port_to_output_PGM[] = {
 const uint16_t PROGMEM port_to_input_PGM[] = {
 	NOT_A_PIN,
 	NOT_A_PIN,
+	(uint16_t)&PINB,
 	NOT_A_PIN,
-	(uint16_t)&PINC,
 	(uint16_t)&PIND,
 	(uint16_t)&PINE,
 	(uint16_t)&PINF,
