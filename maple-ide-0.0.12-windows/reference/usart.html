@@ -1,0 +1,198 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>USART &mdash; Maple v0.0.12 Documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/breathe.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.0.12',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/round_logo_32x32.ico"/>
+    <link rel="top" title="Maple v0.0.12 Documentation" href="index.html" />
+    <link rel="next" title="Maple" href="hardware/maple.html" />
+    <link rel="prev" title="USB" href="usb.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="hardware/maple.html" title="Maple"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="usb.html" title="USB"
+             accesskey="P">previous</a> |</li>
+    <li><a href="http://leaflabs.com/">LeafLabs</a> |</li>
+    
+        <li><a href="index.html">Index</a> &raquo;</li>
+ 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="usart">
+<span id="id1"></span><h1>USART<a class="headerlink" href="#usart" title="Permalink to this headline">¶</a></h1>
+<p>A USART is more commonly known a <em>serial port</em>.  It&#8217;s used to transmit
+information between Maple and another device (like your computer,
+another Maple, etc.).</p>
+<div class="contents local topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#hardware-circuit-design" id="id2">Hardware/Circuit Design</a></li>
+<li><a class="reference internal" href="#compatible-devices-and-specifications" id="id3">Compatible Devices and Specifications</a></li>
+<li><a class="reference internal" href="#recommended-reading" id="id4">Recommended Reading</a></li>
+</ul>
+</div>
+<div class="section" id="hardware-circuit-design">
+<span id="usart-circuit"></span><h2><a class="toc-backref" href="#id2">Hardware/Circuit Design</a><a class="headerlink" href="#hardware-circuit-design" title="Permalink to this headline">¶</a></h2>
+<p>To use a serial port to communicate with an external serial device,
+connect the TX pin to your device&#8217;s RX pin, the RX to your device&#8217;s TX
+pin, and your Maple board&#8217;s ground to your device&#8217;s ground.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Don&#8217;t connect these pins directly to an RS232 serial
+port; they operate at +/- 12V and can damage your board.</p>
+</div>
+<p>Each LeafLabs board has at least 3 separate USART devices. In the most
+simple use case, the RX and TX pins are used to send data at a
+predetermined speed (or <em>baud rate</em>).  Their usage is documented in
+the <a class="reference internal" href="lang/api/serial.html#lang-serial"><em>Serial Ports</em></a> language reference page.</p>
+<p>Which pins correspond to the USART TX and RX pins are given on your
+board&#8217;s silkscreen, and also in the board-specific USART pin maps
+available here:</p>
+<ul class="simple">
+<li><a class="reference internal" href="hardware/maple.html#maple-usart-map"><em>Maple</em></a></li>
+<li><a class="reference internal" href="hardware/maple-ret6.html#maple-ret6-usart-map"><em>Maple RET6 Edition</em></a></li>
+<li><a class="reference internal" href="hardware/maple-mini.html#maple-mini-usart-map"><em>Maple Mini</em></a></li>
+<li><a class="reference internal" href="hardware/maple-native-beta.html#maple-native-b-usart-map"><em>Maple Native Beta</em></a></li>
+</ul>
+<p>If you use a particular serial port, you cannot also use its
+communication pins for other purposes at the same time.</p>
+</div>
+<div class="section" id="compatible-devices-and-specifications">
+<h2><a class="toc-backref" href="#id3">Compatible Devices and Specifications</a><a class="headerlink" href="#compatible-devices-and-specifications" title="Permalink to this headline">¶</a></h2>
+<p>We have successfully used the USART ports with an FT232R-based
+USB-serial converter at up to 115200 baud.  Higher speeds should
+certainly be possible.</p>
+</div>
+<div class="section" id="recommended-reading">
+<h2><a class="toc-backref" href="#id4">Recommended Reading</a><a class="headerlink" href="#recommended-reading" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference external" href="http://en.wikipedia.org/wiki/Universal_asynchronous_receiver/transmitter">Wikipedia article on Universal Asynchronous Receiver/Transmitter
+(USART)</a></li>
+<li><a class="reference external" href="http://arduino.cc/en/Reference/Serial">Arduino Serial reference</a></li>
+<li>ST <a class="reference external" href="http://www.st.com/stonline/products/literature/rm/13902.pdf">Reference Manual RM0008</a>
+(PDF), Chapter 27.</li>
+<li><a class="reference external" href="http://www.freebsd.org/doc/en/articles/serial-uart/">Serial and UART Tutorial</a> (written for
+FreeBSD, but contains a large amount of general information).</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/round_logo_60x60.png" alt="Logo"/>
+            </a></p>
+<h3><a href="index.html">Table Of Contents</a></h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="maple-quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="maple-ide-install.html">IDE Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ide.html">IDE Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="unix-toolchain.html">Command-Line Toolchain</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="language.html">Language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="libraries.html">Libraries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="arduino-compatibility.html">Arduino Compatibility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="libmaple.html"><tt class="docutils literal"><span class="pre">libmaple</span></tt></a></li>
+<li class="toctree-l1"><a class="reference internal" href="bootloader.html">Bootloader</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="arm-gcc.html">GCC and libc for Maple</a></li>
+<li class="toctree-l1"><a class="reference internal" href="language-index.html">Language Index</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="adc.html">ADC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="external-interrupts.html">External Interrupts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fsmc.html">FSMC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gpio.html">GPIO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="i2c.html">I<sup>2</sup>C</a></li>
+<li class="toctree-l1"><a class="reference internal" href="jtag.html">JTAG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pwm.html">PWM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="spi.html">SPI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="timers.html">Timers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="systick.html">SysTick</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usb.html">USB</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">USART</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="hardware/maple.html">Maple</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hardware/maple-ret6.html">Maple RET6 Edition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hardware/maple-mini.html">Maple Mini</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hardware/maple-native-beta.html">Maple Native β</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="hardware/maple.html" title="Maple"
+             >next</a></li>
+        <li class="right" >
+          <a href="usb.html" title="USB"
+             >previous</a> |</li>
+    <li><a href="http://leaflabs.com/">LeafLabs</a> |</li>
+    
+        <li><a href="index.html">Index</a> &raquo;</li>
+ 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010, 2011, LeafLabs, LLC.
+      Last updated on Sep 13, 2011.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,250 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Timers &mdash; Maple v0.0.12 Documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/breathe.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.0.12',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/round_logo_32x32.ico"/>
+    <link rel="top" title="Maple v0.0.12 Documentation" href="index.html" />
+    <link rel="next" title="SysTick" href="systick.html" />
+    <link rel="prev" title="SPI" href="spi.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="systick.html" title="SysTick"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="spi.html" title="SPI"
+             accesskey="P">previous</a> |</li>
+    <li><a href="http://leaflabs.com/">LeafLabs</a> |</li>
+    
+        <li><a href="index.html">Index</a> &raquo;</li>
+ 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="timers">
+<span id="id1"></span><h1>Timers<a class="headerlink" href="#timers" title="Permalink to this headline">¶</a></h1>
+<p>There are four general purpose timers in the Maple microcontroller
+that can be configured to generate periodic or delayed events with
+minimal work done by the microcontroller. For example, the <a class="reference internal" href="pwm.html#pwm"><em>PWM</em></a> channels can generate regular square-wave signals on specific
+output pins without consuming extra clock cycles. By attaching
+interrupt handlers to these channels (instead of just changing the
+voltage on an external pin), more complex events can be scheduled.</p>
+<div class="contents local topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#introduction" id="id2">Introduction</a></li>
+<li><a class="reference internal" href="#library-documentation" id="id3">Library Documentation</a></li>
+<li><a class="reference internal" href="#caveats" id="id4">Caveats</a><ul>
+<li><a class="reference internal" href="#pwm-conflicts" id="id5">PWM Conflicts</a></li>
+<li><a class="reference internal" href="#overhead" id="id6">Overhead</a></li>
+<li><a class="reference internal" href="#jitter" id="id7">Jitter</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="introduction">
+<h2><a class="toc-backref" href="#id2">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p id="timers-prescale">The four timers each have four separate compare channels. Each channel
+has an associated 16-bit counter that can be configured with a 16-bit
+prescaler and a 16-bit overflow value.  The prescaler determines how
+fast the counter changes, while the overflow value determines when it
+gets reset.</p>
+<p>The prescaler acts as a divider of the 72MHz system clock.  That is,
+with a prescaler of 1, the channel&#8217;s counter increments with a
+frequency of 72MHz, rolling over (passing the maximum 16-bit unsigned
+integer value of 65,535) more than a thousand times a second.  With a
+prescaler of 7200, it has a frequency of (72/7200) MHz = 10 KHz,
+rolling over approximately every 6.55 seconds.</p>
+<p>The overflow value is the maximum value the counter will go up to. It
+defaults to the full 65,535; smaller values will cause the counter to
+reset to zero more frequently.</p>
+<p>Whenever a channel&#8217;s counter reaches its overflow value, an &#8220;update
+event&#8221; interrupt is generated.  You can configure the Maple to notify
+you when this takes place, by registering an interrupt handler, which
+is a function that will be called when the update event occurs.</p>
+<p>By default, different compare values only change the relative offsets
+between events on a single timer (&#8220;phase&#8221;).  They don&#8217;t control the
+frequency with which they occur.  However, a common trick is to
+increment the compare value manually in the interrupt handler so that
+the event will fire again after the increment period.  There can be a
+different increment value for each channel, so this trick allows
+events to be programmed at 4 different rates on a single timer.  Note
+that function call overheads mean that the smallest increment rate is
+at least a few microseconds.</p>
+</div>
+<div class="section" id="library-documentation">
+<h2><a class="toc-backref" href="#id3">Library Documentation</a><a class="headerlink" href="#library-documentation" title="Permalink to this headline">¶</a></h2>
+<p>See the <a class="reference internal" href="lang/api/hardwaretimer.html#lang-hardwaretimer"><em>HardwareTimer</em></a> reference for more
+information on controlling the built-in timers.</p>
+</div>
+<div class="section" id="caveats">
+<h2><a class="toc-backref" href="#id4">Caveats</a><a class="headerlink" href="#caveats" title="Permalink to this headline">¶</a></h2>
+<p>Working with timers and interrupts can be tricky; they are a somewhat
+&#8220;advanced&#8221; topic.  The following subsections explain some common
+problems associated with using timers and timer interrupts.</p>
+<p>In general: start simple, test with <a class="reference internal" href="lang/api/assert.html#lang-assert"><em>ASSERT(...)</em></a>, and don&#8217;t try
+to do too much in your interrupt handlers!  Make sure that what you&#8217;re
+trying to do in a handler isn&#8217;t going to block other interrupts from
+firing, if those other interrupts are important for your program.</p>
+<div class="section" id="pwm-conflicts">
+<span id="timers-pwm-conflicts"></span><h3><a class="toc-backref" href="#id5">PWM Conflicts</a><a class="headerlink" href="#pwm-conflicts" title="Permalink to this headline">¶</a></h3>
+<p>Because PWM functionality on a given pin depends on the configuration
+of the timer and channel, you must chose your channels carefully if
+you want to use both timer interrupts and PWM in the same program.
+Refer to your board&#8217;s timer pin map to match up timer channels and pin
+numbers:</p>
+<ul class="simple">
+<li><a class="reference internal" href="hardware/maple.html#maple-timer-map"><em>Maple</em></a></li>
+<li><a class="reference internal" href="hardware/maple-ret6.html#maple-ret6-timer-map"><em>Maple RET6 Edition</em></a></li>
+<li><a class="reference internal" href="hardware/maple-mini.html#maple-mini-timer-map"><em>Maple Mini</em></a></li>
+<li><a class="reference internal" href="hardware/maple-native-beta.html#maple-native-b-timer-map"><em>Maple Native Beta</em></a></li>
+</ul>
+</div>
+<div class="section" id="overhead">
+<h3><a class="toc-backref" href="#id6">Overhead</a><a class="headerlink" href="#overhead" title="Permalink to this headline">¶</a></h3>
+<p>There is some overhead associated with function and interrupt calls
+(loading and unloading the stack, preparing state, etc.) and this
+overhead can fudge your timing. Imperfect code branching also means
+that, e.g., channel 1 interrupts may get called a couple clock cycles
+sooner than a channel 4 interrupt, all other configuration being the
+same.</p>
+</div>
+<div class="section" id="jitter">
+<h3><a class="toc-backref" href="#id7">Jitter</a><a class="headerlink" href="#jitter" title="Permalink to this headline">¶</a></h3>
+<p>Other interrupts can and will get called before or during the timer
+interrupt routines, causing pseudorandom delays and other
+frustrations.</p>
+<p>Disabling the <a class="reference internal" href="usb.html#usb"><em>USB</em></a> port (by calling <tt class="docutils literal"><span class="pre">SerialUSB.end()</span></tt>,
+or just running off a battery) helps a lot, but then you lose the
+auto-reset and communications functionality.  This will require that
+you put your Maple into <a class="reference internal" href="troubleshooting.html#troubleshooting-perpetual-bootloader"><em>perpetual bootloader mode</em></a> before uploading a new program
+to it (or somehow causing your program to re-enable serial over USB
+using <a class="reference internal" href="lang/api/serialusb.html#lang-serialusb-begin"><em>SerialUSB.begin()</em></a>).</p>
+<p>The <a class="reference internal" href="systick.html#systick"><em>SysTick</em></a> peripheral another way to perform
+periodic or delayed events.  Its separate timer does not conflict with
+any other peripherals, but the associated 1 kHz interrupt can jitter
+the general purpose timer interrupts.  The SysTick peripheral can be
+disabled by calling <a class="reference internal" href="libmaple/api/systick.html#libmaple-systick-disable"><em>systick_disable()</em></a>, and re-enabled using
+<a class="reference internal" href="libmaple/api/systick.html#libmaple-systick-enable"><em>systick_enable()</em></a>.  However, be aware
+that calling <tt class="docutils literal"><span class="pre">systick_disable()</span></tt> will stop the values coming from
+<a class="reference internal" href="lang/api/micros.html#lang-micros"><em>micros()</em></a> and <a class="reference internal" href="lang/api/millis.html#lang-millis"><em>millis()</em></a> from increasing.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/round_logo_60x60.png" alt="Logo"/>
+            </a></p>
+<h3><a href="index.html">Table Of Contents</a></h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="maple-quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="maple-ide-install.html">IDE Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ide.html">IDE Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="unix-toolchain.html">Command-Line Toolchain</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="language.html">Language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="libraries.html">Libraries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="arduino-compatibility.html">Arduino Compatibility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="libmaple.html"><tt class="docutils literal"><span class="pre">libmaple</span></tt></a></li>
+<li class="toctree-l1"><a class="reference internal" href="bootloader.html">Bootloader</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="arm-gcc.html">GCC and libc for Maple</a></li>
+<li class="toctree-l1"><a class="reference internal" href="language-index.html">Language Index</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="adc.html">ADC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="external-interrupts.html">External Interrupts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fsmc.html">FSMC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gpio.html">GPIO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="i2c.html">I<sup>2</sup>C</a></li>
+<li class="toctree-l1"><a class="reference internal" href="jtag.html">JTAG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pwm.html">PWM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="spi.html">SPI</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Timers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="systick.html">SysTick</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usb.html">USB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usart.html">USART</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="hardware/maple.html">Maple</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hardware/maple-ret6.html">Maple RET6 Edition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hardware/maple-mini.html">Maple Mini</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hardware/maple-native-beta.html">Maple Native β</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="systick.html" title="SysTick"
+             >next</a></li>
+        <li class="right" >
+          <a href="spi.html" title="SPI"
+             >previous</a> |</li>
+    <li><a href="http://leaflabs.com/">LeafLabs</a> |</li>
+    
+        <li><a href="index.html">Index</a> &raquo;</li>
+ 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010, 2011, LeafLabs, LLC.
+      Last updated on Sep 13, 2011.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>

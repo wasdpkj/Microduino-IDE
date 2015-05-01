@@ -1,0 +1,234 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>GPIO &mdash; Maple v0.0.12 Documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/breathe.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.0.12',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/round_logo_32x32.ico"/>
+    <link rel="top" title="Maple v0.0.12 Documentation" href="index.html" />
+    <link rel="next" title="I2C" href="i2c.html" />
+    <link rel="prev" title="FSMC" href="fsmc.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="i2c.html" title="I2C"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="fsmc.html" title="FSMC"
+             accesskey="P">previous</a> |</li>
+    <li><a href="http://leaflabs.com/">LeafLabs</a> |</li>
+    
+        <li><a href="index.html">Index</a> &raquo;</li>
+ 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="gpio">
+<span id="id1"></span><h1>GPIO<a class="headerlink" href="#gpio" title="Permalink to this headline">¶</a></h1>
+<p>Each LeafLabs board comes with ready-to-use General Purpose
+Input/Output (GPIO) pins, which are numbered starting from zero.
+These numbers are listed on your board&#8217;s silkscreen, next to where the
+pin is broken out to a header.  Many pins may additionally be used for
+special features or interfacing with other hardware.</p>
+<div class="contents local topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#gpio-modes" id="id5">GPIO Modes</a></li>
+<li><a class="reference internal" href="#function-reference" id="id6">Function Reference</a></li>
+<li><a class="reference internal" href="#gpio-ports" id="id7">GPIO Ports</a></li>
+<li><a class="reference internal" href="#pin-maps" id="id8">Pin Maps</a></li>
+<li><a class="reference internal" href="#recommended-reading" id="id9">Recommended Reading</a></li>
+</ul>
+</div>
+<div class="section" id="gpio-modes">
+<span id="id2"></span><h2><a class="toc-backref" href="#id5">GPIO Modes</a><a class="headerlink" href="#gpio-modes" title="Permalink to this headline">¶</a></h2>
+<p>Each GPIO pin can be configured using <a class="reference internal" href="lang/api/pinmode.html#lang-pinmode"><em>pinMode()</em></a> to behave in
+a number of ways: as a digital output pin, as an analog input pin,
+etc.</p>
+<p>A <a class="reference internal" href="lang/api/pinmode.html#lang-pinmode-wiringpinmode"><em>WiringPinMode</em></a> value specifies
+the complete set of possible configurations; not every pin can have
+all of these modes.  For example, on the Maple, pin 15 may have mode
+<tt class="docutils literal"><span class="pre">INPUT_ANALOG</span></tt>, but not <tt class="docutils literal"><span class="pre">PWM</span></tt>.  See your board&#8217;s <a class="reference internal" href="#gpio-pin-maps"><em>pin maps</em></a> and its silkscreen for more information on what
+functionality is available on each pin.</p>
+</div>
+<div class="section" id="function-reference">
+<h2><a class="toc-backref" href="#id6">Function Reference</a><a class="headerlink" href="#function-reference" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="lang/api/pinmode.html#lang-pinmode"><em>pinMode()</em></a></li>
+<li><a class="reference internal" href="lang/api/digitalread.html#lang-digitalread"><em>digitalRead()</em></a></li>
+<li><a class="reference internal" href="lang/api/digitalwrite.html#lang-digitalwrite"><em>digitalWrite()</em></a></li>
+<li><a class="reference internal" href="lang/api/analogread.html#lang-analogread"><em>analogRead()</em></a></li>
+<li><a class="reference internal" href="lang/api/pwmwrite.html#lang-pwmwrite"><em>pwmWrite()</em></a> (Maple&#8217;s equivalent to <tt class="docutils literal"><span class="pre">analogWrite()</span></tt>; see
+<a class="reference internal" href="lang/api/analogwrite.html#lang-analogwrite"><em>analogWrite()</em></a> for differences from the Arduino version).</li>
+</ul>
+</div>
+<div class="section" id="gpio-ports">
+<span id="id3"></span><h2><a class="toc-backref" href="#id7">GPIO Ports</a><a class="headerlink" href="#gpio-ports" title="Permalink to this headline">¶</a></h2>
+<p>Normally, you&#8217;ll interact with pins using just their number (or a
+constant like <a class="reference internal" href="lang/api/board-values.html#lang-board-values-led"><em>BOARD_LED_PIN</em></a> which
+stands for a number).  However, behind the scenes, the STM32
+microcontroller on your board separates the pins into groups called
+<em>GPIO ports</em>.  Each GPIO port is given a letter, so for example,
+there&#8217;s GPIO port A, port B, and so on<a class="footnote-reference" href="#fnumports" id="id4">[1]</a>.  The pins on a
+GPIO port are given <em>bit numbers</em>, which go from 0 to 15.  In ST&#8217;s
+documentation, a pin is given by the letter &#8220;P&#8221;, followed by its port
+letter and bit number.  For instance, &#8220;PA4&#8221; is GPIO port A, bit 4.</p>
+</div>
+<div class="section" id="pin-maps">
+<span id="gpio-pin-maps"></span><h2><a class="toc-backref" href="#id8">Pin Maps</a><a class="headerlink" href="#pin-maps" title="Permalink to this headline">¶</a></h2>
+<p>Part of <a class="reference internal" href="ide.html#ide"><em>Maple IDE&#8217;s</em></a> job is to convert normal pin numbers
+into the corresponding GPIO port and bit when you call functions like
+<a class="reference internal" href="lang/api/pinmode.html#lang-pinmode"><em>pinMode()</em></a>.  It does this using a <em>pin map</em>, which lists the
+GPIO port and bit for each pin number.  The GPIO documentation for
+your board includes its pin map, which also lists the other
+peripherals by pin number:</p>
+<ul class="simple">
+<li><a class="reference internal" href="hardware/maple.html#maple-gpios"><em>Maple</em></a></li>
+<li><a class="reference internal" href="hardware/maple-ret6.html#maple-ret6-gpios"><em>Maple RET6 Edition</em></a></li>
+<li><a class="reference internal" href="hardware/maple-mini.html#maple-mini-gpios"><em>Maple Mini</em></a></li>
+<li><a class="reference internal" href="hardware/maple-native-beta.html#maple-native-b"><em>Maple Native (Beta)</em></a></li>
+</ul>
+<p id="gpio-5v-tolerant">The current and voltage limitations were determined using the STM32
+datasheets.  In particular, only some GPIO pins are <strong>5V tolerant</strong>,
+which means that applying 5 volts to a pin and reading it as input or
+allowing it to drain to ground will not damage that pin.  Connecting a
+voltage higher than 3.3V to a non-5V tolerant pin may damage your
+board.</p>
+</div>
+<div class="section" id="recommended-reading">
+<span id="gpio-recommended-reading"></span><h2><a class="toc-backref" href="#id9">Recommended Reading</a><a class="headerlink" href="#recommended-reading" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>ST Documentation for the STM32F103 series of microcontrollers:<ul>
+<li><a class="reference external" href="http://www.st.com/internet/com/TECHNICAL_RESOURCES/TECHNICAL_LITERATURE/REFERENCE_MANUAL/CD00171190.pdf">Reference Manual RM0008</a>
+(PDF); general, definitive resource for STM32F1 line.</li>
+<li><a class="reference external" href="http://www.st.com/internet/com/TECHNICAL_RESOURCES/TECHNICAL_LITERATURE/PROGRAMMING_MANUAL/CD00228163.pdf">Programming Manual PM0056</a>
+(PDF); assembly language and register reference.</li>
+</ul>
+</li>
+</ul>
+<p class="rubric">Footnotes</p>
+<table class="docutils footnote" frame="void" id="fnumports" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id4">[1]</a></td><td>The total number of GPIO ports depends on what board
+you have.  For example, Maple Mini has three: ports A, B, and C.
+Maple Native has seven: ports A through G.</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/round_logo_60x60.png" alt="Logo"/>
+            </a></p>
+<h3><a href="index.html">Table Of Contents</a></h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="maple-quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="maple-ide-install.html">IDE Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ide.html">IDE Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="unix-toolchain.html">Command-Line Toolchain</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="language.html">Language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="libraries.html">Libraries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="arduino-compatibility.html">Arduino Compatibility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="libmaple.html"><tt class="docutils literal"><span class="pre">libmaple</span></tt></a></li>
+<li class="toctree-l1"><a class="reference internal" href="bootloader.html">Bootloader</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="arm-gcc.html">GCC and libc for Maple</a></li>
+<li class="toctree-l1"><a class="reference internal" href="language-index.html">Language Index</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="adc.html">ADC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="external-interrupts.html">External Interrupts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fsmc.html">FSMC</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">GPIO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="i2c.html">I<sup>2</sup>C</a></li>
+<li class="toctree-l1"><a class="reference internal" href="jtag.html">JTAG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pwm.html">PWM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="spi.html">SPI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="timers.html">Timers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="systick.html">SysTick</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usb.html">USB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usart.html">USART</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="hardware/maple.html">Maple</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hardware/maple-ret6.html">Maple RET6 Edition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hardware/maple-mini.html">Maple Mini</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hardware/maple-native-beta.html">Maple Native β</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="i2c.html" title="I2C"
+             >next</a></li>
+        <li class="right" >
+          <a href="fsmc.html" title="FSMC"
+             >previous</a> |</li>
+    <li><a href="http://leaflabs.com/">LeafLabs</a> |</li>
+    
+        <li><a href="index.html">Index</a> &raquo;</li>
+ 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010, 2011, LeafLabs, LLC.
+      Last updated on Sep 13, 2011.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>

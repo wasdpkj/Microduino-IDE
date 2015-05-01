@@ -1,0 +1,1306 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Maple Mini &mdash; Maple v0.0.12 Documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/breathe.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.0.12',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../_static/round_logo_32x32.ico"/>
+    <link rel="top" title="Maple v0.0.12 Documentation" href="../index.html" />
+    <link rel="next" title="Maple Native β" href="maple-native-beta.html" />
+    <link rel="prev" title="Maple RET6 Edition" href="maple-ret6.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="maple-native-beta.html" title="Maple Native β"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="maple-ret6.html" title="Maple RET6 Edition"
+             accesskey="P">previous</a> |</li>
+    <li><a href="http://leaflabs.com/">LeafLabs</a> |</li>
+    
+        <li><a href="../index.html">Index</a> &raquo;</li>
+ 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="maple-mini">
+<span id="id1"></span><h1>Maple Mini<a class="headerlink" href="#maple-mini" title="Permalink to this headline">¶</a></h1>
+<p>This page is a general resource for information specific to the Maple
+Mini.  The Maple Mini is a smaller version of the Maple that fits on a
+breadboard.</p>
+<div class="contents local topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#technical-specifications" id="id3">Technical Specifications</a></li>
+<li><a class="reference internal" href="#powering-the-maple-mini" id="id4">Powering the Maple Mini</a></li>
+<li><a class="reference internal" href="#gpio-information" id="id5">GPIO Information</a><ul>
+<li><a class="reference internal" href="#master-pin-map" id="id6">Master Pin Map</a></li>
+<li><a class="reference internal" href="#gpio-port-pin-map" id="id7">GPIO Port Pin Map</a></li>
+<li><a class="reference internal" href="#timer-pin-map" id="id8">Timer Pin Map</a></li>
+<li><a class="reference internal" href="#exti-line-pin-map" id="id9">EXTI Line Pin Map</a></li>
+<li><a class="reference internal" href="#usart-pin-map" id="id10">USART Pin Map</a></li>
+<li><a class="reference internal" href="#low-noise-adc-pins" id="id11">Low-Noise ADC Pins</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#board-specific-values" id="id12">Board-Specific Values</a></li>
+<li><a class="reference internal" href="#hardware-design-files" id="id13">Hardware Design Files</a></li>
+<li><a class="reference internal" href="#failure-modes" id="id14">Failure Modes</a></li>
+<li><a class="reference internal" href="#errata" id="id15">Errata</a></li>
+<li><a class="reference internal" href="#recommended-reading" id="id16">Recommended Reading</a></li>
+</ul>
+</div>
+<div class="section" id="technical-specifications">
+<h2><a class="toc-backref" href="#id3">Technical Specifications</a><a class="headerlink" href="#technical-specifications" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>MCU: <a class="reference internal" href="#maple-mini-stdocs"><em>STM32F103RCBT6</em></a>, a 32-bit ARM Cortex
+M3 microprocessor</li>
+<li>Clock Speed: <strong>72 MHz</strong></li>
+<li><strong>128 KB Flash</strong> and <strong>20 KB SRAM</strong></li>
+<li>34 <a class="reference internal" href="../gpio.html#gpio"><em>digital I/ pins (GPIOs)</em></a></li>
+<li>12 <a class="reference internal" href="../pwm.html#pwm"><em>PWM</em></a> pins at 16 bit resolution</li>
+<li>9 <a class="reference internal" href="../adc.html#adc"><em>analog input (ADC)</em></a> pins at 12 bit resolution</li>
+<li>2 <a class="reference internal" href="../spi.html#spi"><em>SPI</em></a> peripherals</li>
+<li>2 <a class="reference internal" href="../i2c.html#i2c"><em>I2C</em></a> peripherals</li>
+<li>7 Channels of Direct Memory Access (<strong>DMA</strong>) (<a class="reference internal" href="../libmaple/api/dma.html#libmaple-dma"><em>dma.h</em></a>)</li>
+<li>3 <a class="reference internal" href="../usart.html#usart"><em>USART (serial port)</em></a> peripherals</li>
+<li>1 advanced and 3 general-purpose <a class="reference internal" href="../timers.html#timers"><em>timers</em></a></li>
+<li>Dedicated <a class="reference internal" href="../usb.html#usb"><em>USB</em></a> port for programming and communications</li>
+<li><a class="reference internal" href="../jtag.html#jtag"><em>JTAG</em></a></li>
+<li>Nested Vectored Interrupt Controller (NVIC) (including
+<a class="reference internal" href="../external-interrupts.html#external-interrupts"><em>external interrupt</em></a> on GPIOs)</li>
+<li>Supplies up to 500 mA at 3.3 V, with <a class="reference internal" href="#maple-mini-adc-bank"><em>separate 250 mA digital
+and analog regulators</em></a> for low-noise analog
+performance</li>
+<li><a class="reference internal" href="#maple-mini-hardware"><em>Open source, four layer design</em></a></li>
+<li>Support for low power, sleep, and standby modes (&lt;500 μA)</li>
+<li>Operating Voltage: 3.3 V</li>
+<li>Input Voltage (recommended): 3 V — 12 V</li>
+<li>Dimensions: 2.02″ × 0.72″</li>
+</ul>
+</div>
+<div class="section" id="powering-the-maple-mini">
+<span id="maple-mini-powering"></span><h2><a class="toc-backref" href="#id4">Powering the Maple Mini</a><a class="headerlink" href="#powering-the-maple-mini" title="Permalink to this headline">¶</a></h2>
+<p>You can power the Maple Mini via the USB plug or by powering Vin
+directly.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p>The silkscreen on the Maple Mini suggests it will accept
+an input voltage up to 16 V.  We recommend applying <strong>no greater
+than 12 V</strong>.</p>
+<p class="last">See <a class="reference internal" href="#maple-mini-vin"><em>this erratum</em></a> for more information.</p>
+</div>
+</div>
+<div class="section" id="gpio-information">
+<span id="maple-mini-gpios"></span><h2><a class="toc-backref" href="#id5">GPIO Information</a><a class="headerlink" href="#gpio-information" title="Permalink to this headline">¶</a></h2>
+<p>The Maple Mini features 34 total input/output pins, numbered <tt class="docutils literal"><span class="pre">D0</span></tt>
+through <tt class="docutils literal"><span class="pre">D33</span></tt>.  These numbers correspond to the numeric values next
+to each header on the Maple Mini&#8217;s silkscreen.  However, some of them
+have special uses by default <a class="footnote-reference" href="#fusedpins" id="id2">[1]</a>.</p>
+<p id="maple-mini-usb-pins">Pin <tt class="docutils literal"><span class="pre">D23</span></tt> is the <a class="reference internal" href="../usb.html#usb"><em>USB</em></a> D+ line, and <tt class="docutils literal"><span class="pre">D24</span></tt> is the USB D-
+line.  To use them as GPIOs, your program will need to <a class="reference internal" href="../lang/api/serialusb.html#lang-serialusb-end"><em>disable
+SerialUSB</em></a> first.  Be aware, however, that
+disabling SerialUSB means that the <a class="reference internal" href="../bootloader.html#bootloader"><em>bootloader</em></a>
+won&#8217;t work properly, and you&#8217;ll need to use
+<a class="reference internal" href="../troubleshooting.html#troubleshooting-perpetual-bootloader"><em>Perpetual Bootloader Mode</em></a> to make your next upload.</p>
+<p id="maple-mini-but">Pin <tt class="docutils literal"><span class="pre">D32</span></tt> is the Mini&#8217;s <a class="reference internal" href="../lang/api/board-values.html#lang-board-values-but"><em>button pin</em></a>.
+It is thus mainly useful as an <a class="reference internal" href="../lang/api/constants.html#lang-pin-levels"><em>input</em></a>.  The
+pin will <a class="reference internal" href="../lang/api/digitalread.html#lang-digitalread"><em>read</em></a> <tt class="docutils literal"><span class="pre">HIGH</span></tt> when the <a class="reference internal" href="../lang/api/isbuttonpressed.html#lang-isbuttonpressed"><em>button
+is pressed</em></a>.</p>
+<p id="maple-mini-led">Pin <tt class="docutils literal"><span class="pre">D33</span></tt> is the Mini&#8217;s <a class="reference internal" href="../lang/api/board-values.html#lang-board-values-led"><em>LED pin</em></a>.  It
+is thus mainly useful as an <a class="reference internal" href="../lang/api/constants.html#lang-pin-levels"><em>output</em></a>.  The LED
+will glow when <tt class="docutils literal"><span class="pre">HIGH</span></tt> is <a class="reference internal" href="../lang/api/digitalwrite.html#lang-digitalwrite"><em>written</em></a> to it.
+(It also supports <a class="reference internal" href="../pwm.html#pwm"><em>PWM</em></a>, for finer-grained brightness control).</p>
+<div class="section" id="master-pin-map">
+<span id="maple-mini-pin-map-master"></span><h3><a class="toc-backref" href="#id6">Master Pin Map</a><a class="headerlink" href="#master-pin-map" title="Permalink to this headline">¶</a></h3>
+<p>This table shows a summary the available functionality on every GPIO
+pin, by peripheral type.  The &#8220;5 V?&#8221; column documents whether or not
+the pin is <a class="reference internal" href="../gpio.html#gpio-5v-tolerant"><em>5 volt tolerant</em></a>.</p>
+<p>Note that this table is not exhaustive; on some pins, more peripherals
+are available than are listed here.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="13%" />
+<col width="13%" />
+<col width="13%" />
+<col width="13%" />
+<col width="13%" />
+<col width="13%" />
+<col width="13%" />
+<col width="13%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Pin</th>
+<th class="head"><a class="reference internal" href="../gpio.html#gpio"><em>GPIO</em></a></th>
+<th class="head"><a class="reference internal" href="../adc.html#adc"><em>ADC</em></a></th>
+<th class="head"><a class="reference internal" href="../timers.html#timers"><em>Timer</em></a></th>
+<th class="head"><a class="reference internal" href="../i2c.html#i2c"><em>I2C</em></a></th>
+<th class="head"><a class="reference internal" href="../usart.html#usart"><em>UART</em></a></th>
+<th class="head"><a class="reference internal" href="../spi.html#spi"><em>SPI</em></a></th>
+<th class="head">5 V?</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>D0</td>
+<td>PB11</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>2_SDA</td>
+<td>3_RX</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>Yes</td>
+</tr>
+<tr><td>D1</td>
+<td>PB10</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>2_SCL</td>
+<td>3_TX</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>Yes</td>
+</tr>
+<tr><td>D2</td>
+<td>PB2</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>Yes</td>
+</tr>
+<tr><td>D3</td>
+<td>PB0</td>
+<td>CH8</td>
+<td>3_CH3</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+</tr>
+<tr><td>D4</td>
+<td>PA7</td>
+<td>CH7</td>
+<td>3_CH2</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>1_MOSI</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+</tr>
+<tr><td>D5</td>
+<td>PA6</td>
+<td>CH6</td>
+<td>3_CH1</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>1_MISO</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+</tr>
+<tr><td>D6</td>
+<td>PA5</td>
+<td>CH5</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>1_SCK</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+</tr>
+<tr><td>D7</td>
+<td>PA4</td>
+<td>CH4</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>2_CK</td>
+<td>1_NSS</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+</tr>
+<tr><td>D8</td>
+<td>PA3</td>
+<td>CH3</td>
+<td>2_CH4</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>2_RX</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+</tr>
+<tr><td>D9</td>
+<td>PA2</td>
+<td>CH2</td>
+<td>2_CH3</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>2_TX</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+</tr>
+<tr><td>D10</td>
+<td>PA1</td>
+<td>CH1</td>
+<td>2_CH2</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>2_RTS</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+</tr>
+<tr><td>D11</td>
+<td>PA0</td>
+<td>CH0</td>
+<td>2_CH1_ETR</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>2_CTS</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+</tr>
+<tr><td>D12</td>
+<td>PC15</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+</tr>
+<tr><td>D13</td>
+<td>PC14</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+</tr>
+<tr><td>D14</td>
+<td>PC13</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+</tr>
+<tr><td>D15</td>
+<td>PB7</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>4_CH2</td>
+<td>1_SDA</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>Yes</td>
+</tr>
+<tr><td>D16</td>
+<td>PB6</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>4_CH1</td>
+<td>2_SCL</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>Yes</td>
+</tr>
+<tr><td>D17</td>
+<td>PB5</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>1_SMBA</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+</tr>
+<tr><td>D18</td>
+<td>PB4</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>Yes</td>
+</tr>
+<tr><td>D19</td>
+<td>PB3</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>Yes</td>
+</tr>
+<tr><td>D20</td>
+<td>PA15</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>Yes</td>
+</tr>
+<tr><td>D21</td>
+<td>PA14</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>Yes</td>
+</tr>
+<tr><td>D22</td>
+<td>PA13</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>Yes</td>
+</tr>
+<tr><td>D23</td>
+<td>PA12</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>1_ETR</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>1_RTS</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>Yes</td>
+</tr>
+<tr><td>D24</td>
+<td>PA11</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>1_CH4</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>1_CTS</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>Yes</td>
+</tr>
+<tr><td>D25</td>
+<td>PA10</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>1_CH3</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>1_RX</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>Yes</td>
+</tr>
+<tr><td>D26</td>
+<td>PA9</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>1_CH2</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>1_TX</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>Yes</td>
+</tr>
+<tr><td>D27</td>
+<td>PA8</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>1_CH1</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>1_CK</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>Yes</td>
+</tr>
+<tr><td>D28</td>
+<td>PB15</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>2_MOSI</td>
+<td>Yes</td>
+</tr>
+<tr><td>D29</td>
+<td>PB14</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>3_RTS</td>
+<td>2_MISO</td>
+<td>Yes</td>
+</tr>
+<tr><td>D30</td>
+<td>PB13</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>3_CTS</td>
+<td>2_SCK</td>
+<td>Yes</td>
+</tr>
+<tr><td>D31</td>
+<td>PB12</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>1_BKIN</td>
+<td>2_SMBA</td>
+<td>3_CK</td>
+<td>2_NSS</td>
+<td>Yes</td>
+</tr>
+<tr><td>D32</td>
+<td>PB8</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>4_CH3</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>Yes</td>
+</tr>
+<tr><td>D33</td>
+<td>PB1</td>
+<td>CH9</td>
+<td>3_CH4</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="gpio-port-pin-map">
+<span id="maple-mini-gpio-port-map"></span><h3><a class="toc-backref" href="#id7">GPIO Port Pin Map</a><a class="headerlink" href="#gpio-port-pin-map" title="Permalink to this headline">¶</a></h3>
+<p>The following table shows what pins are associated with each
+<a class="reference internal" href="../gpio.html#gpio-ports"><em>GPIO port</em></a>.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="33%" />
+<col width="33%" />
+<col width="33%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">GPIOA</th>
+<th class="head">GPIOB</th>
+<th class="head">GPIOC</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>PA0: D11</td>
+<td>PB0:  D3</td>
+<td>PC0: -</td>
+</tr>
+<tr><td>PA1: D10</td>
+<td>PB1:  D33</td>
+<td>PC1: -</td>
+</tr>
+<tr><td>PA2: D9</td>
+<td>PB2:  D2</td>
+<td>PC2: -</td>
+</tr>
+<tr><td>PA3: D8</td>
+<td>PB3:  D19</td>
+<td>PC3: -</td>
+</tr>
+<tr><td>PA4: D7</td>
+<td>PB4:  D18</td>
+<td>PC4: -</td>
+</tr>
+<tr><td>PA5: D6</td>
+<td>PB5:  D17</td>
+<td>PC5: -</td>
+</tr>
+<tr><td>PA6: D5</td>
+<td>PB6:  D16</td>
+<td>PC6: -</td>
+</tr>
+<tr><td>PA7: D4</td>
+<td>PB7:  D15</td>
+<td>PC7: -</td>
+</tr>
+<tr><td>PA8: D27</td>
+<td>PB8:  D32</td>
+<td>PC8: -</td>
+</tr>
+<tr><td>PA9: D26</td>
+<td>PB9:  -</td>
+<td>PC9: -</td>
+</tr>
+<tr><td>PA10: D25</td>
+<td>PB10: D1</td>
+<td>PC10: -</td>
+</tr>
+<tr><td>PA11: D24</td>
+<td>PB11: D0</td>
+<td>PC11: -</td>
+</tr>
+<tr><td>PA12: D23</td>
+<td>PB12: D31</td>
+<td>PC12: -</td>
+</tr>
+<tr><td>PA13: D22</td>
+<td>PB13: D30</td>
+<td>PC13: D14</td>
+</tr>
+<tr><td>PA14: D21</td>
+<td>PB14: D29</td>
+<td>PC14: D13</td>
+</tr>
+<tr><td>PA15: D20</td>
+<td>PB15: D28</td>
+<td>PC15: D12</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="timer-pin-map">
+<span id="maple-mini-timer-map"></span><h3><a class="toc-backref" href="#id8">Timer Pin Map</a><a class="headerlink" href="#timer-pin-map" title="Permalink to this headline">¶</a></h3>
+<p>The following table shows what pins are associated with a particular
+timer&#8217;s capture/compare channels.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="20%" />
+<col width="20%" />
+<col width="20%" />
+<col width="20%" />
+<col width="20%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Timer</th>
+<th class="head">Ch. 1</th>
+<th class="head">Ch. 2</th>
+<th class="head">Ch. 3</th>
+<th class="head">Ch. 4</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>1</td>
+<td>D27</td>
+<td>D26</td>
+<td>D25</td>
+<td>D24</td>
+</tr>
+<tr><td>2</td>
+<td>D11</td>
+<td>D10</td>
+<td>D9</td>
+<td>D8</td>
+</tr>
+<tr><td>3</td>
+<td>D5</td>
+<td>D4</td>
+<td>D3</td>
+<td><a class="reference internal" href="#maple-mini-led"><em>D33</em></a></td>
+</tr>
+<tr><td>4</td>
+<td>D16</td>
+<td>D15</td>
+<td><a class="reference internal" href="#maple-mini-but"><em>D32</em></a></td>
+<td>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="exti-line-pin-map">
+<span id="maple-mini-exti-map"></span><h3><a class="toc-backref" href="#id9">EXTI Line Pin Map</a><a class="headerlink" href="#exti-line-pin-map" title="Permalink to this headline">¶</a></h3>
+<p>The following table shows which pins connect to which <a class="reference internal" href="../external-interrupts.html#external-interrupts-exti-line"><em>EXTI lines</em></a>.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="50%" />
+<col width="50%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">EXTI Line</th>
+<th class="head">Pins</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>EXTI0</td>
+<td>D3, D11</td>
+</tr>
+<tr><td>EXTI1</td>
+<td>D10, D33</td>
+</tr>
+<tr><td>EXTI2</td>
+<td>D2, D9</td>
+</tr>
+<tr><td>EXTI3</td>
+<td>D8, D19</td>
+</tr>
+<tr><td>EXTI4</td>
+<td>D7, D18</td>
+</tr>
+<tr><td>EXTI5</td>
+<td>D6, D17</td>
+</tr>
+<tr><td>EXTI6</td>
+<td>D5, D16</td>
+</tr>
+<tr><td>EXTI7</td>
+<td>D4, D15</td>
+</tr>
+<tr><td>EXTI8</td>
+<td>D27, D32</td>
+</tr>
+<tr><td>EXTI9</td>
+<td>D26</td>
+</tr>
+<tr><td>EXTI10</td>
+<td>D1, D25</td>
+</tr>
+<tr><td>EXTI11</td>
+<td>D0, D24</td>
+</tr>
+<tr><td>EXTI12</td>
+<td>D23, D31</td>
+</tr>
+<tr><td>EXTI13</td>
+<td>D14, D22, D30</td>
+</tr>
+<tr><td>EXTI14</td>
+<td>D13, D21, D29</td>
+</tr>
+<tr><td>EXTI15</td>
+<td>D12, D20, D28</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="usart-pin-map">
+<span id="maple-mini-usart-map"></span><h3><a class="toc-backref" href="#id10">USART Pin Map</a><a class="headerlink" href="#usart-pin-map" title="Permalink to this headline">¶</a></h3>
+<p>The Maple Mini has three serial ports (also known as <a class="reference internal" href="../usart.html#usart"><em>USARTs</em></a>). They communicate using the pins given in the following
+table.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="17%" />
+<col width="17%" />
+<col width="17%" />
+<col width="17%" />
+<col width="17%" />
+<col width="17%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Serial Port</th>
+<th class="head">TX</th>
+<th class="head">RX</th>
+<th class="head">CK</th>
+<th class="head">CTS</th>
+<th class="head">RTS</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td><tt class="docutils literal"><span class="pre">Serial1</span></tt></td>
+<td>D26</td>
+<td>D25</td>
+<td>D27</td>
+<td>D24</td>
+<td>D23</td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">Serial2</span></tt></td>
+<td>D9</td>
+<td>D8</td>
+<td>D7</td>
+<td>D11</td>
+<td>D10</td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">Serial3</span></tt></td>
+<td>D1</td>
+<td>D0</td>
+<td>D31</td>
+<td>D30</td>
+<td>D29</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="low-noise-adc-pins">
+<span id="maple-mini-adc-bank"></span><h3><a class="toc-backref" href="#id11">Low-Noise ADC Pins</a><a class="headerlink" href="#low-noise-adc-pins" title="Permalink to this headline">¶</a></h3>
+<p>Maple Mini has an electrically isolated analog power plane with its
+own regulator, and a geometrically isolated ground plane, connected to
+the digital plane by an inductor.  Its analog input pins, D3 — D11,
+are laid out to correspond with these analog planes, and our
+measurements indicate that they generally offer low noise ADC
+performance.  However, analog performance may vary depending upon the
+activity of the other GPIOs.  Consult the <a class="reference internal" href="#maple-mini-hardware"><em>Maple Mini hardware
+design files</em></a> for more details.</p>
+</div>
+</div>
+<div class="section" id="board-specific-values">
+<span id="maple-mini-board-values"></span><h2><a class="toc-backref" href="#id12">Board-Specific Values</a><a class="headerlink" href="#board-specific-values" title="Permalink to this headline">¶</a></h2>
+<p>This section lists the Maple Mini&#8217;s <a class="reference internal" href="../lang/api/board-values.html#lang-board-values"><em>board-specific values</em></a>.</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">CYCLES_PER_MICROSECOND</span></tt>: 72</li>
+<li><tt class="docutils literal"><span class="pre">BOARD_BUTTON_PIN</span></tt>: 32</li>
+<li><tt class="docutils literal"><span class="pre">BOARD_LED_PIN</span></tt>: 33</li>
+<li><tt class="docutils literal"><span class="pre">BOARD_NR_GPIO_PINS</span></tt>: 34</li>
+<li><tt class="docutils literal"><span class="pre">BOARD_NR_PWM_PINS</span></tt>: 12</li>
+<li><tt class="docutils literal"><span class="pre">boardPWMPins</span></tt>: 3, 4, 5, 8, 9, 10, 11, 15, 16, 25, 26, 27</li>
+<li><tt class="docutils literal"><span class="pre">BOARD_NR_ADC_PINS</span></tt>: 9</li>
+<li><tt class="docutils literal"><span class="pre">boardADCPins</span></tt>: 3, 4, 5, 6, 7, 8, 9, 10, 11</li>
+<li><tt class="docutils literal"><span class="pre">BOARD_NR_USED_PINS</span></tt>: 4</li>
+<li><tt class="docutils literal"><span class="pre">boardUsedPins</span></tt>: <tt class="docutils literal"><span class="pre">BOARD_LED_PIN</span></tt>, <tt class="docutils literal"><span class="pre">BOARD_BUTTON_PIN</span></tt>, 23, 24
+(23 and 24 are used by <a class="reference internal" href="#maple-mini-usb-pins"><em>USB</em></a>)</li>
+<li><tt class="docutils literal"><span class="pre">BOARD_NR_USARTS</span></tt>: 3</li>
+<li><tt class="docutils literal"><span class="pre">BOARD_USART1_TX_PIN</span></tt>: 26</li>
+<li><tt class="docutils literal"><span class="pre">BOARD_USART1_RX_PIN</span></tt>: 25</li>
+<li><tt class="docutils literal"><span class="pre">BOARD_USART2_TX_PIN</span></tt>: 9</li>
+<li><tt class="docutils literal"><span class="pre">BOARD_USART2_RX_PIN</span></tt>: 8</li>
+<li><tt class="docutils literal"><span class="pre">BOARD_USART3_TX_PIN</span></tt>: 1</li>
+<li><tt class="docutils literal"><span class="pre">BOARD_USART3_RX_PIN</span></tt>: 0</li>
+<li><tt class="docutils literal"><span class="pre">BOARD_NR_SPI</span></tt>: 2</li>
+<li><tt class="docutils literal"><span class="pre">BOARD_SPI1_NSS_PIN</span></tt>: 7</li>
+<li><tt class="docutils literal"><span class="pre">BOARD_SPI1_MOSI_PIN</span></tt>: 4</li>
+<li><tt class="docutils literal"><span class="pre">BOARD_SPI1_MISO_PIN</span></tt>: 5</li>
+<li><tt class="docutils literal"><span class="pre">BOARD_SPI1_SCK_PIN</span></tt>: 6</li>
+<li><tt class="docutils literal"><span class="pre">BOARD_SPI2_NSS_PIN</span></tt>: 31</li>
+<li><tt class="docutils literal"><span class="pre">BOARD_SPI2_MOSI_PIN</span></tt>: 28</li>
+<li><tt class="docutils literal"><span class="pre">BOARD_SPI2_MISO_PIN</span></tt>: 29</li>
+<li><tt class="docutils literal"><span class="pre">BOARD_SPI2_SCK_PIN</span></tt>: 30</li>
+<li><tt class="docutils literal"><span class="pre">BOARD_JTMS_SWDIO_PIN</span></tt>: 22</li>
+<li><tt class="docutils literal"><span class="pre">BOARD_JTCK_SWCLK_PIN</span></tt>: 21</li>
+<li><tt class="docutils literal"><span class="pre">BOARD_JTDI_PIN</span></tt>: 20</li>
+<li><tt class="docutils literal"><span class="pre">BOARD_JTDO_PIN</span></tt>: 19</li>
+<li><tt class="docutils literal"><span class="pre">BOARD_NJTRST_PIN</span></tt>: 18</li>
+</ul>
+</div>
+<div class="section" id="hardware-design-files">
+<span id="maple-mini-hardware"></span><h2><a class="toc-backref" href="#id13">Hardware Design Files</a><a class="headerlink" href="#hardware-design-files" title="Permalink to this headline">¶</a></h2>
+<p>The hardware schematics and board layout files are available in the
+<a class="reference external" href="https://github.com/leaflabs/maplemini">Maple Mini GitHub repository</a>.</p>
+<p>From the GitHub repository main page, you can download the entire
+repository by clicking the &#8220;Download&#8221; button.  If you are familiar
+with <a class="reference external" href="http://git-scm.com/">Git</a>, you can also clone the repository
+at the command line with</p>
+<div class="highlight-python"><pre>$ git clone git://github.com/leaflabs/maplemini.git</pre>
+</div>
+</div>
+<div class="section" id="failure-modes">
+<h2><a class="toc-backref" href="#id14">Failure Modes</a><a class="headerlink" href="#failure-modes" title="Permalink to this headline">¶</a></h2>
+<p>The following known failure modes apply to all Maple boards.  The
+failure modes aren&#8217;t design errors, but are easy ways to break or
+damage your board permanently.</p>
+<ul class="simple">
+<li><strong>High voltage on non-tolerant pins</strong>: not all header pins are 5 V
+compatible; so e.g. connecting certain serial devices in the wrong
+way could over-voltage the pins.  The <a class="reference internal" href="#maple-mini-pin-map-master"><em>pin-mapping master table</em></a> details which pins are <a class="reference internal" href="../gpio.html#gpio-5v-tolerant"><em>5
+V-tolerant</em></a>.</li>
+</ul>
+</div>
+<div class="section" id="errata">
+<h2><a class="toc-backref" href="#id15">Errata</a><a class="headerlink" href="#errata" title="Permalink to this headline">¶</a></h2>
+<p>This section lists known issues and warnings for the Maple Mini Rev 2
+(the first Rev sold to the public).</p>
+<ul id="maple-mini-vin">
+<li><p class="first"><strong>Silkscreen Vin voltage mistake</strong>: The silkscreen on the Maple Mini
+falsely indicates that Vin may be supplied with up to 16 V.  We
+recommend an input voltage <strong>no greater than 12 V</strong>.</p>
+<p>The voltage regulator on the Mini is rated up to 16 V.  However, our
+tests indicate that as its input voltage approaches 16 V, its output
+begins to rise to levels higher than those recommended by ST for
+supplying the STM32F103CB.  The limit of 12 V keeps the voltage
+supplied to the processor at safe levels.</p>
+</li>
+</ul>
+</div>
+<div class="section" id="recommended-reading">
+<h2><a class="toc-backref" href="#id16">Recommended Reading</a><a class="headerlink" href="#recommended-reading" title="Permalink to this headline">¶</a></h2>
+<p id="maple-mini-stdocs">STMicro documentation for STM32F103CB microcontroller:</p>
+<ul class="simple">
+<li><a class="reference external" href="http://www.st.com/internet/com/TECHNICAL_RESOURCES/TECHNICAL_LITERATURE/DATASHEET/CD00161566.pdf">Datasheet</a>
+(PDF); covers STM32F103x8, STM32F103xB.</li>
+<li><a class="reference external" href="http://www.st.com/internet/com/TECHNICAL_RESOURCES/TECHNICAL_LITERATURE/REFERENCE_MANUAL/CD00171190.pdf">Reference Manual RM0008</a>
+(PDF); definitive resource for peripherals on the STM32F1 line.</li>
+<li><a class="reference external" href="http://www.st.com/internet/com/TECHNICAL_RESOURCES/TECHNICAL_LITERATURE/PROGRAMMING_MANUAL/CD00228163.pdf">Programming Manual PM0056</a>
+(PDF); assembly language and register reference.</li>
+<li><a class="reference external" href="http://www.st.com/internet/mcu/product/189782.jsp">STM32F103CB</a>
+overview page with links to further references.</li>
+</ul>
+<p class="rubric">Footnotes</p>
+<table class="docutils footnote" frame="void" id="fusedpins" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id2">[1]</a></td><td>See <a class="reference internal" href="../lang/api/board-values.html#lang-board-values-used-pins"><em>boardUsedPins</em></a>
+for more information.</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/round_logo_60x60.png" alt="Logo"/>
+            </a></p>
+<h3><a href="../index.html">Table Of Contents</a></h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../maple-quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../maple-ide-install.html">IDE Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ide.html">IDE Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../unix-toolchain.html">Command-Line Toolchain</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../language.html">Language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../libraries.html">Libraries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../arduino-compatibility.html">Arduino Compatibility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../libmaple.html"><tt class="docutils literal"><span class="pre">libmaple</span></tt></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bootloader.html">Bootloader</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../troubleshooting.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../faq.html">FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../arm-gcc.html">GCC and libc for Maple</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../language-index.html">Language Index</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../adc.html">ADC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../external-interrupts.html">External Interrupts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../fsmc.html">FSMC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../gpio.html">GPIO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../i2c.html">I<sup>2</sup>C</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../jtag.html">JTAG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pwm.html">PWM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../spi.html">SPI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../timers.html">Timers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../systick.html">SysTick</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usb.html">USB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usart.html">USART</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="maple.html">Maple</a></li>
+<li class="toctree-l1"><a class="reference internal" href="maple-ret6.html">Maple RET6 Edition</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Maple Mini</a></li>
+<li class="toctree-l1"><a class="reference internal" href="maple-native-beta.html">Maple Native β</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="maple-native-beta.html" title="Maple Native β"
+             >next</a></li>
+        <li class="right" >
+          <a href="maple-ret6.html" title="Maple RET6 Edition"
+             >previous</a> |</li>
+    <li><a href="http://leaflabs.com/">LeafLabs</a> |</li>
+    
+        <li><a href="../index.html">Index</a> &raquo;</li>
+ 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010, 2011, LeafLabs, LLC.
+      Last updated on Sep 13, 2011.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>

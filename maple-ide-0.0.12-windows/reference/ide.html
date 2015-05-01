@@ -1,0 +1,266 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Maple IDE &mdash; Maple v0.0.12 Documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/breathe.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.0.12',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/round_logo_32x32.ico"/>
+    <link rel="top" title="Maple v0.0.12 Documentation" href="index.html" />
+    <link rel="next" title="Unix Toolchain Quickstart" href="unix-toolchain.html" />
+    <link rel="prev" title="Maple IDE Installation" href="maple-ide-install.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="unix-toolchain.html" title="Unix Toolchain Quickstart"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="maple-ide-install.html" title="Maple IDE Installation"
+             accesskey="P">previous</a> |</li>
+    <li><a href="http://leaflabs.com/">LeafLabs</a> |</li>
+    
+        <li><a href="index.html">Index</a> &raquo;</li>
+ 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="maple-ide">
+<span id="ide"></span><h1>Maple IDE<a class="headerlink" href="#maple-ide" title="Permalink to this headline">¶</a></h1>
+<p>This page documents the basic functionality of the Maple IDE.
+Specifically, it describes the operation of the buttons on the main
+toolbar.  It is expected to become more comprehensive over time.</p>
+<p>If you&#8217;re new to Maple, you should begin with the <a class="reference internal" href="maple-quickstart.html#maple-quickstart"><em>Maple
+Quickstart</em></a>.</p>
+<p>If you need to install the IDE for the first time, see the
+<a class="reference internal" href="maple-ide-install.html#maple-ide-install"><em>Maple IDE Installation</em></a> page.</p>
+<div class="contents local topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#ide-windows" id="id1">IDE Windows</a></li>
+<li><a class="reference internal" href="#toolbar-buttons" id="id2">Toolbar Buttons</a><ul>
+<li><a class="reference internal" href="#verify" id="id3">Verify</a></li>
+<li><a class="reference internal" href="#stop" id="id4">Stop</a></li>
+<li><a class="reference internal" href="#new" id="id5">New</a></li>
+<li><a class="reference internal" href="#open" id="id6">Open</a></li>
+<li><a class="reference internal" href="#save" id="id7">Save</a></li>
+<li><a class="reference internal" href="#upload" id="id8">Upload</a></li>
+<li><a class="reference internal" href="#serial-monitor" id="id9">Serial Monitor</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#example-code" id="id10">Example Code</a></li>
+</ul>
+</div>
+<div class="section" id="ide-windows">
+<h2><a class="toc-backref" href="#id1">IDE Windows</a><a class="headerlink" href="#ide-windows" title="Permalink to this headline">¶</a></h2>
+<p>The following screenshot shows the appearance of a Maple IDE window:</p>
+<div class="figure align-center">
+<img alt="Maple IDE" src="_images/ide-blinky1.png" />
+</div>
+<p>Note the toolbar buttons at the top; they&#8217;re the icons with circles or
+squares around them.  You can program your board mostly through the
+use of these buttons, which are described in the next section.</p>
+</div>
+<div class="section" id="toolbar-buttons">
+<h2><a class="toc-backref" href="#id2">Toolbar Buttons</a><a class="headerlink" href="#toolbar-buttons" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="verify">
+<span id="ide-verify"></span><h3><a class="toc-backref" href="#id3">Verify</a><a class="headerlink" href="#verify" title="Permalink to this headline">¶</a></h3>
+<img alt="_images/button-verify1.png" class="align-left" src="_images/button-verify1.png" />
+<p>Click Verify to compile the current sketch.  This will process your
+program and produce an executable which can run on your board.</p>
+</div>
+<div class="section" id="stop">
+<span id="ide-stop"></span><h3><a class="toc-backref" href="#id4">Stop</a><a class="headerlink" href="#stop" title="Permalink to this headline">¶</a></h3>
+<img alt="_images/button-stop1.png" class="align-left" src="_images/button-stop1.png" />
+<p>Click Stop to cancel a compilation.  Longer programs may take a while
+to compile.  Clicking Stop will let you go back to writing code
+without having to wait for compilation to finish.</p>
+</div>
+<div class="section" id="new">
+<span id="ide-new"></span><h3><a class="toc-backref" href="#id5">New</a><a class="headerlink" href="#new" title="Permalink to this headline">¶</a></h3>
+<img alt="_images/button-new1.png" class="align-left" src="_images/button-new1.png" />
+<p>Click New to make a fresh sketch.</p>
+</div>
+<div class="section" id="open">
+<span id="ide-open"></span><h3><a class="toc-backref" href="#id6">Open</a><a class="headerlink" href="#open" title="Permalink to this headline">¶</a></h3>
+<img alt="_images/button-open1.png" class="align-left" src="_images/button-open1.png" />
+<p>Click Open to open an existing sketch.  Maple IDE will first look for
+the sketch in your <em>sketchbook</em>, which is a folder on your computer
+that contains your sketches.  The sketchbook is stored in different
+places depending on your operating system.  You can change its
+location in the IDE&#8217;s preferences.</p>
+</div>
+<div class="section" id="save">
+<span id="ide-save"></span><h3><a class="toc-backref" href="#id7">Save</a><a class="headerlink" href="#save" title="Permalink to this headline">¶</a></h3>
+<img alt="_images/button-save1.png" class="align-left" src="_images/button-save1.png" />
+<p>Click Save to save the currently opened sketch.  This will save all
+open tabs, not just the one you&#8217;re currently looking at.</p>
+</div>
+<div class="section" id="upload">
+<span id="ide-upload"></span><h3><a class="toc-backref" href="#id8">Upload</a><a class="headerlink" href="#upload" title="Permalink to this headline">¶</a></h3>
+<img alt="_images/button-upload1.png" class="align-left" src="_images/button-upload1.png" />
+<p>Click Upload to send the compiled sketch to your Maple to run.  Before
+you click Upload, you must have a memory location and serial port
+selected.</p>
+<p>The memory location, either Flash or RAM, determines whether the
+compiled sketch binary will be stored on the Maple.  You can choose
+this using the Tools &gt; Board menu.</p>
+<p>The serial port corresponds to the <a class="reference internal" href="lang/api/serialusb.html#lang-serialusb"><em>SerialUSB</em></a>
+connection the Maple establishes with your computer.  This looks like
+&#8220;COM1&#8221;, &#8220;COM2&#8221;, etc. on Windows, &#8220;/dev/tty.usbmodemXXX&#8221; on Mac (where
+&#8220;XXX&#8221; is some sequence of letters and numbers), or &#8220;/dev/ttyACMXXX&#8221; on
+Linux (again, where &#8220;XXX&#8221; is some sequence of letters and numbers).
+You can choose a serial port using the Tools &gt; Serial Port menu.</p>
+<p>If you&#8217;re trying to upload and are unsuccessful, make sure you&#8217;ve made
+choices for both board and serial port.  More help on uploading
+(including screenshots) is available in the <a class="reference internal" href="maple-quickstart.html#maple-quickstart-upload"><em>quickstart</em></a>.</p>
+<p>If all else fails, try putting your Maple in <a class="reference internal" href="troubleshooting.html#troubleshooting-perpetual-bootloader"><em>perpetual
+bootloader mode</em></a> before
+uploading.  You can always find us on the <a class="reference external" href="http://forums.leaflabs.com">forum</a> or <a class="reference external" href="http://leaflabs.com/contact/">contact us
+directly</a> for help on any problems you&#8217;re having.</p>
+</div>
+<div class="section" id="serial-monitor">
+<span id="ide-serial-monitor"></span><h3><a class="toc-backref" href="#id9">Serial Monitor</a><a class="headerlink" href="#serial-monitor" title="Permalink to this headline">¶</a></h3>
+<img alt="_images/button-serial-monitor1.png" class="align-left" src="_images/button-serial-monitor1.png" />
+<p>Click Serial Monitor to open up a communication channel between your
+PC and the Maple&#8217;s <a class="reference internal" href="lang/api/serialusb.html#lang-serialusb"><em>SerialUSB</em></a> virtual serial
+port.</p>
+<p>If the serial monitor is open, any information sent to the computer
+(for example, using <a class="reference internal" href="lang/api/serialusb.html#lang-serialusb-println"><em>SerialUSB.println()</em></a>) will be displayed in the large text area.
+You can send data to the Maple by typing into the small text box and
+either hitting the Enter key or pressing the Send button.  (The Maple
+can read the data you send with <a class="reference internal" href="lang/api/serialusb.html#lang-serialusb-read"><em>SerialUSB.read()</em></a>).</p>
+<p>Here is an example serial monitor session with the InteractiveTest
+sketch (which you can load in the IDE by choosing menu item File &gt;
+Examples &gt; Maple &gt; InteractiveTest):</p>
+<img alt="_images/serial-monitor1.png" src="_images/serial-monitor1.png" />
+<p>This is the result of typing &#8221;?&#8221; in the text box and clicking Send.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">You cannot upload a sketch while the serial monitor is open.
+If you click <a class="reference internal" href="#ide-upload"><em>Upload</em></a> while the serial monitor is
+open, the IDE will close it for you before proceeding with the
+upload.</p>
+</div>
+</div>
+</div>
+<div class="section" id="example-code">
+<span id="ide-examples"></span><h2><a class="toc-backref" href="#id10">Example Code</a><a class="headerlink" href="#example-code" title="Permalink to this headline">¶</a></h2>
+<p>Maple IDE comes with a variety of sample code you can use to help you
+get started writing your own programs.  To load an example in a new
+Maple IDE window, choose one from the submenus under File &gt; Examples.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/round_logo_60x60.png" alt="Logo"/>
+            </a></p>
+<h3><a href="index.html">Table Of Contents</a></h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="maple-quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="maple-ide-install.html">IDE Installation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">IDE Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="unix-toolchain.html">Command-Line Toolchain</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="language.html">Language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="libraries.html">Libraries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="arduino-compatibility.html">Arduino Compatibility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="libmaple.html"><tt class="docutils literal"><span class="pre">libmaple</span></tt></a></li>
+<li class="toctree-l1"><a class="reference internal" href="bootloader.html">Bootloader</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="arm-gcc.html">GCC and libc for Maple</a></li>
+<li class="toctree-l1"><a class="reference internal" href="language-index.html">Language Index</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="adc.html">ADC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="external-interrupts.html">External Interrupts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fsmc.html">FSMC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gpio.html">GPIO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="i2c.html">I<sup>2</sup>C</a></li>
+<li class="toctree-l1"><a class="reference internal" href="jtag.html">JTAG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pwm.html">PWM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="spi.html">SPI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="timers.html">Timers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="systick.html">SysTick</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usb.html">USB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usart.html">USART</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="hardware/maple.html">Maple</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hardware/maple-ret6.html">Maple RET6 Edition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hardware/maple-mini.html">Maple Mini</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hardware/maple-native-beta.html">Maple Native β</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="unix-toolchain.html" title="Unix Toolchain Quickstart"
+             >next</a></li>
+        <li class="right" >
+          <a href="maple-ide-install.html" title="Maple IDE Installation"
+             >previous</a> |</li>
+    <li><a href="http://leaflabs.com/">LeafLabs</a> |</li>
+    
+        <li><a href="index.html">Index</a> &raquo;</li>
+ 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010, 2011, LeafLabs, LLC.
+      Last updated on Sep 13, 2011.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>

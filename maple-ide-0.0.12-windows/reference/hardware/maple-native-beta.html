@@ -1,0 +1,2312 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Maple Native β &mdash; Maple v0.0.12 Documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/breathe.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.0.12',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../_static/round_logo_32x32.ico"/>
+    <link rel="top" title="Maple v0.0.12 Documentation" href="../index.html" />
+    <link rel="prev" title="Maple Mini" href="maple-mini.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="maple-mini.html" title="Maple Mini"
+             accesskey="P">previous</a></li>
+    <li><a href="http://leaflabs.com/">LeafLabs</a> |</li>
+    
+        <li><a href="../index.html">Index</a> &raquo;</li>
+ 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="maple-native">
+<span id="maple-native-b"></span><h1>Maple Native β<a class="headerlink" href="#maple-native" title="Permalink to this headline">¶</a></h1>
+<p>This page is a general resource for information specific to the Maple
+Native Beta.  Since this is a beta release, the information here may
+change slightly between now and the final Maple Native release.</p>
+<div class="contents local topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#technical-specifications" id="id2">Technical Specifications</a></li>
+<li><a class="reference internal" href="#powering-the-maple-native" id="id3">Powering the Maple Native</a></li>
+<li><a class="reference internal" href="#using-the-built-in-battery-charger" id="id4">Using the Built-in Battery Charger</a></li>
+<li><a class="reference internal" href="#gpio-information" id="id5">GPIO Information</a><ul>
+<li><a class="reference internal" href="#master-pin-map" id="id6">Master Pin Map</a></li>
+<li><a class="reference internal" href="#gpio-port-pin-map" id="id7">GPIO Port Pin Map</a></li>
+<li><a class="reference internal" href="#timer-pin-map" id="id8">Timer Pin Map</a></li>
+<li><a class="reference internal" href="#exti-line-pin-map" id="id9">EXTI Line Pin Map</a></li>
+<li><a class="reference internal" href="#usart-pin-map" id="id10">USART Pin Map</a></li>
+<li><a class="reference internal" href="#low-noise-adc-pins" id="id11">Low-Noise ADC Pins</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#board-specific-values" id="id12">Board-Specific Values</a><ul>
+<li><a class="reference internal" href="#hardware-design-files" id="id13">Hardware Design Files</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#failure-modes" id="id14">Failure Modes</a></li>
+<li><a class="reference internal" href="#errata" id="id15">Errata</a></li>
+<li><a class="reference internal" href="#recommended-reading" id="id16">Recommended Reading</a></li>
+</ul>
+</div>
+<div class="section" id="technical-specifications">
+<h2><a class="toc-backref" href="#id2">Technical Specifications</a><a class="headerlink" href="#technical-specifications" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>MCU: <a class="reference external" href="maple-native-b-stdocs">STM32F103ZET6</a>, a 32-bit ARM Cortex M3
+microprocessor.</li>
+<li>Clock Speed: <strong>72 MHz</strong></li>
+<li><strong>512 KB Flash</strong>, <strong>64 KB SRAM</strong> (on-chip), <strong>1 MB SRAM</strong> (external)</li>
+<li>106 <a class="reference internal" href="../gpio.html#gpio"><em>digital I/O pins</em></a></li>
+<li>17 <a class="reference internal" href="../pwm.html#pwm"><em>PWM</em></a> pins at 16 bit resolution</li>
+<li>21 <a class="reference internal" href="../adc.html#adc"><em>analog input (ADC)</em></a> pins at 12-bit resolution</li>
+<li>3 <a class="reference internal" href="../spi.html#spi"><em>SPI</em></a> peripherals</li>
+<li>2 <a class="reference internal" href="../i2c.html#i2c"><em>I2C</em></a> peripherals</li>
+<li>12 Channels of Direct Memory Access (<strong>DMA</strong>) (<a class="reference internal" href="../libmaple/api/dma.html#libmaple-dma"><em>dma.h</em></a>)
+with 2 DMA controllers</li>
+<li>3 <a class="reference internal" href="../usart.html#usart"><em>USART (serial port)</em></a> peripherals, 2 <strong>UART</strong> peripherals</li>
+<li>2 advanced, 4 general-purpose, and 2 basic <a class="reference internal" href="../timers.html#timers"><em>timers</em></a></li>
+<li>Dedicated <a class="reference internal" href="../usb.html#usb"><em>USB</em></a> port for programming and communications</li>
+<li><a class="reference internal" href="../jtag.html#jtag"><em>JTAG</em></a></li>
+<li>Nested Vectored Interrupt Controller (NVIC) (including
+<a class="reference internal" href="../lang/api/attachinterrupt.html#lang-attachinterrupt"><em>external interrupt</em></a> on GPIOs)</li>
+<li>Supplies up to 500 mA at 3.3 V, with <a class="reference internal" href="#maple-native-b-adc-bank"><em>separate 250 mA digital
+and analog regulators</em></a> for low-noise analog
+performance</li>
+<li><a class="reference internal" href="#maple-native-b-hardware"><em>Open-source, four layer design</em></a></li>
+<li>Support for low power, sleep, and standby modes (&lt;500 μA)</li>
+<li>Operating Voltage: 3.3 V</li>
+<li>Input Voltage (recommended): 3 V — 12 V</li>
+<li>Dimensions: 4″ × 2.1″</li>
+</ul>
+</div>
+<div class="section" id="powering-the-maple-native">
+<span id="maple-native-b-powering"></span><h2><a class="toc-backref" href="#id3">Powering the Maple Native</a><a class="headerlink" href="#powering-the-maple-native" title="Permalink to this headline">¶</a></h2>
+<p>The Maple Native may be powered from the barrel jack connector, USB,
+or a LiPo battery.  The power source is determined by the header
+labeled &#8220;PWRSEL&#8221; on the silkscreen.  Boards are shipped with a jumper
+on the USB selector.  In order to power it off of an alternative
+source, unplug the Maple Native, then move the jumper to the desired
+selector before reconnecting power.</p>
+<p>You can also power the Maple Native via the pin labeled &#8220;Vin&#8221; on the
+vertical header to the right of the PWRSEL header.  This pin feeds
+into both the digital and analog voltage regulators.  However, don&#8217;t
+do this while simultaneously powering the board from another source,
+or you could damage it.</p>
+<p>We recommend an input voltage no greater than 12 V.</p>
+</div>
+<div class="section" id="using-the-built-in-battery-charger">
+<h2><a class="toc-backref" href="#id4">Using the Built-in Battery Charger</a><a class="headerlink" href="#using-the-built-in-battery-charger" title="Permalink to this headline">¶</a></h2>
+<p>Maple Native includes a built-in LiPo battery charger.  In order to
+use it, put a jumper across the CHRG selector on the PWRSEL header and
+across the USB, or EXT selectors, depending on whether you&#8217;re charging
+the battery via USB cable or Vin, respectively.  The LED labeled CHRG
+will light up while the battery is being charged.  When the battery is
+finished charging, the LED labeled DONE will light up.</p>
+</div>
+<div class="section" id="gpio-information">
+<span id="maple-native-b-gpios"></span><h2><a class="toc-backref" href="#id5">GPIO Information</a><a class="headerlink" href="#gpio-information" title="Permalink to this headline">¶</a></h2>
+<p>The Maple Native features 106 total input/output pins, numbered <tt class="docutils literal"><span class="pre">D0</span></tt>
+through <tt class="docutils literal"><span class="pre">D105</span></tt>.  In most cases, these numbers correspond to the
+numeric values next to each header on the Maple Native&#8217;s silkscreen.
+However, pins <tt class="docutils literal"><span class="pre">D101</span></tt> through <tt class="docutils literal"><span class="pre">D105</span></tt> are broken out to the
+<a class="reference internal" href="../jtag.html#jtag"><em>JTAG</em></a> header, and are not numbered on the silkscreen.  In
+addition, some other pins have other uses by default <a class="footnote-reference" href="#fusedpins" id="id1">[1]</a>.</p>
+<p id="maple-native-b-but">Pin <tt class="docutils literal"><span class="pre">D6</span></tt> is the Native&#8217;s <a class="reference internal" href="../lang/api/board-values.html#lang-board-values-but"><em>button pin</em></a>.
+It is thus mainly useful as an <a class="reference internal" href="../lang/api/constants.html#lang-pin-levels"><em>input</em></a>.  The
+pin will <a class="reference internal" href="../lang/api/digitalread.html#lang-digitalread"><em>read</em></a> <tt class="docutils literal"><span class="pre">HIGH</span></tt> when the <a class="reference internal" href="../lang/api/isbuttonpressed.html#lang-isbuttonpressed"><em>button
+is pressed</em></a>.</p>
+<p id="maple-native-b-led">Pin <tt class="docutils literal"><span class="pre">D22</span></tt> is the Native&#8217;s <a class="reference internal" href="../lang/api/board-values.html#lang-board-values-led"><em>LED pin</em></a>.
+It is thus mainly useful as an <a class="reference internal" href="../lang/api/constants.html#lang-pin-levels"><em>output</em></a>.  The
+LED will glow when <tt class="docutils literal"><span class="pre">HIGH</span></tt> is <a class="reference internal" href="../lang/api/digitalwrite.html#lang-digitalwrite"><em>written</em></a> to
+it.</p>
+<p id="maple-native-b-fsmc">Many of the pins on the right header (pins <tt class="docutils literal"><span class="pre">D56</span></tt> through <tt class="docutils literal"><span class="pre">D100</span></tt>,
+the header is labeled <a class="reference internal" href="../fsmc.html#fsmc"><em>&#8220;FSMC&#8221;</em></a> on the silkscreen) are
+connected to the SRAM chip.  Using these pins as GPIOs may render the
+memory chip useless, which can cause your program to crash. For this
+reason, we don&#8217;t recommend that you use these pins unless you know
+what you are doing. The following pins on the right header are not
+connected to the SRAM and may be used with impunity: <tt class="docutils literal"><span class="pre">D57</span></tt>, <tt class="docutils literal"><span class="pre">D60</span></tt>,
+<tt class="docutils literal"><span class="pre">D63</span></tt>, <tt class="docutils literal"><span class="pre">D66</span></tt>, <tt class="docutils literal"><span class="pre">D69</span></tt>, <tt class="docutils literal"><span class="pre">D72</span></tt>, <tt class="docutils literal"><span class="pre">D75</span></tt>, <tt class="docutils literal"><span class="pre">D80</span></tt>, <tt class="docutils literal"><span class="pre">D83</span></tt>.</p>
+<p id="maple-native-b-jtag">Pins <tt class="docutils literal"><span class="pre">D101</span></tt> through <tt class="docutils literal"><span class="pre">D105</span></tt> are connected to the pads on the
+<a class="reference internal" href="../jtag.html#jtag"><em>JTAG</em></a> header.  In order to use them as GPIOs, you must
+first disable the Maple Native&#8217;s debug ports.  You can do this by
+calling <a class="reference internal" href="../lang/api/disabledebugports.html#lang-disabledebugports"><em>disableDebugPorts()</em></a>.  (Note that this means you
+won&#8217;t be able to use JTAG or SW-Debug to debug your program).</p>
+<div class="section" id="master-pin-map">
+<span id="maple-native-b-pin-map-master"></span><h3><a class="toc-backref" href="#id6">Master Pin Map</a><a class="headerlink" href="#master-pin-map" title="Permalink to this headline">¶</a></h3>
+<p>This table shows a summary the available functionality on every GPIO
+pin, by peripheral type.  The &#8220;5 V?&#8221; column documents whether or not
+the pin is <a class="reference internal" href="../gpio.html#gpio-5v-tolerant"><em>5 volt tolerant</em></a>.</p>
+<p>Note that this table is not exhaustive; on some pins, more peripherals
+are available than are listed here.</p>
+<p><strong>Top header:</strong></p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="13%" />
+<col width="13%" />
+<col width="13%" />
+<col width="13%" />
+<col width="13%" />
+<col width="13%" />
+<col width="13%" />
+<col width="13%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Pin</th>
+<th class="head"><a class="reference internal" href="../gpio.html#gpio"><em>GPIO</em></a></th>
+<th class="head"><a class="reference internal" href="../adc.html#adc"><em>ADC</em></a></th>
+<th class="head"><a class="reference internal" href="../timers.html#timers"><em>Timer</em></a></th>
+<th class="head"><a class="reference internal" href="../i2c.html#i2c"><em>I2C</em></a></th>
+<th class="head"><a class="reference internal" href="../usart.html#usart"><em>UART</em></a></th>
+<th class="head"><a class="reference internal" href="../spi.html#spi"><em>SPI</em></a></th>
+<th class="head">5 V?</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>D0</td>
+<td>PB10</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>2_SCL</td>
+<td>3_TX</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>Yes</td>
+</tr>
+<tr><td>D1</td>
+<td>PB11</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>2_SDA</td>
+<td>3_RX</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>Yes</td>
+</tr>
+<tr><td>D2</td>
+<td>PB12</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>1_BKIN</td>
+<td>2_SMBA</td>
+<td>3_CK</td>
+<td>2_NSS</td>
+<td>Yes</td>
+</tr>
+<tr><td>D3</td>
+<td>PB13</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>3_CTS</td>
+<td>2_SCK</td>
+<td>Yes</td>
+</tr>
+<tr><td>D4</td>
+<td>PB14</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>3_RTS</td>
+<td>2_MISO</td>
+<td>Yes</td>
+</tr>
+<tr><td>D5</td>
+<td>PB15</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>2_MOSI</td>
+<td>Yes</td>
+</tr>
+<tr><td>D6</td>
+<td>PG15</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>Yes</td>
+</tr>
+<tr><td>D7</td>
+<td>PC0</td>
+<td>1_CH10</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+</tr>
+<tr><td>D8</td>
+<td>PC1</td>
+<td>1_CH11</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+</tr>
+<tr><td>D9</td>
+<td>PC2</td>
+<td>1_CH12</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+</tr>
+<tr><td>D10</td>
+<td>PC3</td>
+<td>1_CH13</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+</tr>
+<tr><td>D11</td>
+<td>PC4</td>
+<td>1_CH14</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+</tr>
+<tr><td>D12</td>
+<td>PC5</td>
+<td>1_CH15</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+</tr>
+<tr><td>D13</td>
+<td>PC6</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>8_CH1</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>Yes</td>
+</tr>
+<tr><td>D14</td>
+<td>PC7</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>8_CH2</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>Yes</td>
+</tr>
+<tr><td>D15</td>
+<td>PC8</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>8_CH3</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>Yes</td>
+</tr>
+<tr><td>D16</td>
+<td>PC9</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>8_CH4</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>Yes</td>
+</tr>
+<tr><td>D17</td>
+<td>PC10</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>4_TX</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>Yes</td>
+</tr>
+<tr><td>D18</td>
+<td>PC11</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>4_RX</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>Yes</td>
+</tr>
+<tr><td>D19</td>
+<td>PC12</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>5_TX</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>Yes</td>
+</tr>
+<tr><td>D20</td>
+<td>PC13</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+</tr>
+<tr><td>D21</td>
+<td>PC14</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+</tr>
+<tr><td>D22</td>
+<td>PC15</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+</tr>
+<tr><td>D23</td>
+<td>PA8</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>1_CH1</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>1_CK</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>Yes</td>
+</tr>
+<tr><td>D24</td>
+<td>PA9</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>1_CH2</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>1_TX</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>Yes</td>
+</tr>
+<tr><td>D25</td>
+<td>PA10</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>1_CH3</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>1_RX</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>Yes</td>
+</tr>
+<tr><td>D26</td>
+<td>PB9</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>4_CH4</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>Yes</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Bottom header:</strong></p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last"><tt class="docutils literal"><span class="pre">D48</span></tt>, <tt class="docutils literal"><span class="pre">D49</span></tt>, <tt class="docutils literal"><span class="pre">D50</span></tt>, <tt class="docutils literal"><span class="pre">D51</span></tt> are also connected to
+Timer 2 channels 1, 2, 3, and 4, respectively.</p>
+</div>
+<table border="1" class="docutils">
+<colgroup>
+<col width="13%" />
+<col width="13%" />
+<col width="13%" />
+<col width="13%" />
+<col width="13%" />
+<col width="13%" />
+<col width="13%" />
+<col width="13%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Pin</th>
+<th class="head"><a class="reference internal" href="../gpio.html#gpio"><em>GPIO</em></a></th>
+<th class="head"><a class="reference internal" href="../adc.html#adc"><em>ADC</em></a></th>
+<th class="head"><a class="reference internal" href="../timers.html#timers"><em>Timer</em></a></th>
+<th class="head"><a class="reference internal" href="../i2c.html#i2c"><em>I2C</em></a></th>
+<th class="head"><a class="reference internal" href="../usart.html#usart"><em>UART</em></a></th>
+<th class="head"><a class="reference internal" href="../spi.html#spi"><em>SPI</em></a></th>
+<th class="head">5 V?</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>D27</td>
+<td>PD2</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>3_ETR</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>5_RX</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>Yes</td>
+</tr>
+<tr><td>D28</td>
+<td>PD3</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>Yes</td>
+</tr>
+<tr><td>D29</td>
+<td>PD6</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>Yes</td>
+</tr>
+<tr><td>D30</td>
+<td>PG11</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>Yes</td>
+</tr>
+<tr><td>D31</td>
+<td>PG12</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>Yes</td>
+</tr>
+<tr><td>D32</td>
+<td>PG13</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>Yes</td>
+</tr>
+<tr><td>D33</td>
+<td>PG14</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>Yes</td>
+</tr>
+<tr><td>D34</td>
+<td>PG8</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>Yes</td>
+</tr>
+<tr><td>D35</td>
+<td>PG7</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>Yes</td>
+</tr>
+<tr><td>D36</td>
+<td>PG6</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>Yes</td>
+</tr>
+<tr><td>D37</td>
+<td>PB5</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>1_SMBA</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>3_MOSI</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+</tr>
+<tr><td>D38</td>
+<td>PB6</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>4_CH1</td>
+<td>1_SCL</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>Yes</td>
+</tr>
+<tr><td>D39</td>
+<td>PB7</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>4_CH2</td>
+<td>1_SDA</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>Yes</td>
+</tr>
+<tr><td>D40</td>
+<td>PF11</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>Yes</td>
+</tr>
+<tr><td>D41</td>
+<td>PF6</td>
+<td>3_CH4</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+</tr>
+<tr><td>D42</td>
+<td>PF7</td>
+<td>3_CH5</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+</tr>
+<tr><td>D43</td>
+<td>PF8</td>
+<td>3_CH6</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+</tr>
+<tr><td>D44</td>
+<td>PF9</td>
+<td>3_CH7</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+</tr>
+<tr><td>D45</td>
+<td>PF10</td>
+<td>3_CH8</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+</tr>
+<tr><td>D46</td>
+<td>PB1</td>
+<td>1_CH9</td>
+<td>3_CH4</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+</tr>
+<tr><td>D47</td>
+<td>PB0</td>
+<td>1_CH8</td>
+<td>3_CH3</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+</tr>
+<tr><td>D48</td>
+<td>PA0</td>
+<td>1_CH0</td>
+<td>5_CH1</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>2_CTS</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+</tr>
+<tr><td>D49</td>
+<td>PA1</td>
+<td>1_CH1</td>
+<td>5_CH2</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>2_RTS</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+</tr>
+<tr><td>D50</td>
+<td>PA2</td>
+<td>1_CH2</td>
+<td>5_CH3</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>2_TX</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+</tr>
+<tr><td>D51</td>
+<td>PA3</td>
+<td>1_CH3</td>
+<td>5_CH4</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>2_RX</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+</tr>
+<tr><td>D52</td>
+<td>PA4</td>
+<td>1_CH4</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>2_CK</td>
+<td>1_NSS</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+</tr>
+<tr><td>D53</td>
+<td>PA5</td>
+<td>1_CH5</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>1_SCK</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+</tr>
+<tr><td>D54</td>
+<td>PA6</td>
+<td>1_CH6</td>
+<td>3_CH1</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>1_MISO</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+</tr>
+<tr><td>D55</td>
+<td>PA7</td>
+<td>1_CH7</td>
+<td>3_CH2</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>1_MOSI</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p id="maple-native-b-fsmc-map"><strong>Right (FSMC) header</strong></p>
+<p>All of the following pins are 5V-tolerant.  Note that in the &#8220;FSMC&#8221;
+column below, entries with a &#8220;Dn&#8221; value (D0, D1, etc.) don&#8217;t refer to
+pins; they refer to FSMC data lines.  See <a class="reference internal" href="#maple-native-b-stdocs"><em>RM0008</em></a> for more information.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Many of the pins on this header are used by the Maple
+Native&#8217;s SRAM chip.  Don&#8217;t use them as GPIOs unless you know what
+you&#8217;re doing, or your program may crash.  <a class="reference internal" href="#maple-native-b-fsmc"><em>See above</em></a> for more information.</p>
+</div>
+<table border="1" class="docutils">
+<colgroup>
+<col width="33%" />
+<col width="33%" />
+<col width="33%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Pin</th>
+<th class="head"><a class="reference internal" href="../gpio.html#gpio"><em>GPIO</em></a></th>
+<th class="head"><a class="reference internal" href="../fsmc.html#fsmc"><em>FSMC</em></a></th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>D56</td>
+<td>PF0</td>
+<td>A0</td>
+</tr>
+<tr><td>D57</td>
+<td>PD11</td>
+<td>A16</td>
+</tr>
+<tr><td>D58</td>
+<td>P14</td>
+<td>D0</td>
+</tr>
+<tr><td>D59</td>
+<td>PF1</td>
+<td>A1</td>
+</tr>
+<tr><td>D60</td>
+<td>PD12</td>
+<td>A17</td>
+</tr>
+<tr><td>D61</td>
+<td>PD15</td>
+<td>D1</td>
+</tr>
+<tr><td>D62</td>
+<td>PF2</td>
+<td>A2</td>
+</tr>
+<tr><td>D63</td>
+<td>PD13</td>
+<td>A18</td>
+</tr>
+<tr><td>D64</td>
+<td>PD0</td>
+<td>D2</td>
+</tr>
+<tr><td>D65</td>
+<td>PF3</td>
+<td>A3</td>
+</tr>
+<tr><td>D66</td>
+<td>PE3</td>
+<td>A19</td>
+</tr>
+<tr><td>D67</td>
+<td>PD1</td>
+<td>D3</td>
+</tr>
+<tr><td>D68</td>
+<td>PF4</td>
+<td>A4</td>
+</tr>
+<tr><td>D69</td>
+<td>PE4</td>
+<td>A20</td>
+</tr>
+<tr><td>D70</td>
+<td>PE7</td>
+<td>D4</td>
+</tr>
+<tr><td>D71</td>
+<td>PF5</td>
+<td>A5</td>
+</tr>
+<tr><td>D72</td>
+<td>PE5</td>
+<td>A21</td>
+</tr>
+<tr><td>D73</td>
+<td>PE8</td>
+<td>D8</td>
+</tr>
+<tr><td>D74</td>
+<td>PF12</td>
+<td>A6</td>
+</tr>
+<tr><td>D75</td>
+<td>PE6</td>
+<td>A22</td>
+</tr>
+<tr><td>D76</td>
+<td>PE9</td>
+<td>D6</td>
+</tr>
+<tr><td>D77</td>
+<td>PF13</td>
+<td>A7</td>
+</tr>
+<tr><td>D78</td>
+<td>PE10</td>
+<td>D7</td>
+</tr>
+<tr><td>D79</td>
+<td>PF14</td>
+<td>A8</td>
+</tr>
+<tr><td>D80</td>
+<td>PG9</td>
+<td>NE2/NCE3</td>
+</tr>
+<tr><td>D81</td>
+<td>PE11</td>
+<td>D8</td>
+</tr>
+<tr><td>D82</td>
+<td>PF15</td>
+<td>A9</td>
+</tr>
+<tr><td>D83</td>
+<td>PG10</td>
+<td>NCE4_1/NE3/NCE4_2</td>
+</tr>
+<tr><td>D84</td>
+<td>PE12</td>
+<td>D9</td>
+</tr>
+<tr><td>D85</td>
+<td>PG0</td>
+<td>A10</td>
+</tr>
+<tr><td>D86</td>
+<td>PD5</td>
+<td>NWE</td>
+</tr>
+<tr><td>D87</td>
+<td>PE13</td>
+<td>D10</td>
+</tr>
+<tr><td>D88</td>
+<td>PG1</td>
+<td>A11</td>
+</tr>
+<tr><td>D89</td>
+<td>PD4</td>
+<td>NOE</td>
+</tr>
+<tr><td>D90</td>
+<td>PE14</td>
+<td>D11</td>
+</tr>
+<tr><td>D91</td>
+<td>PG2</td>
+<td>A12</td>
+</tr>
+<tr><td>D92</td>
+<td>PE1</td>
+<td>NBL1</td>
+</tr>
+<tr><td>D93</td>
+<td>PE15</td>
+<td>D12</td>
+</tr>
+<tr><td>D94</td>
+<td>PG3</td>
+<td>A13</td>
+</tr>
+<tr><td>D95</td>
+<td>PE0</td>
+<td>NBL0</td>
+</tr>
+<tr><td>D96</td>
+<td>PD8</td>
+<td>D13</td>
+</tr>
+<tr><td>D97</td>
+<td>PG4</td>
+<td>A14</td>
+</tr>
+<tr><td>D98</td>
+<td>PD9</td>
+<td>D14</td>
+</tr>
+<tr><td>D99</td>
+<td>PG5</td>
+<td>A15</td>
+</tr>
+<tr><td>D100</td>
+<td>PD10</td>
+<td>D15</td>
+</tr>
+</tbody>
+</table>
+<p><strong>JTAG header pins</strong></p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">See <a class="reference internal" href="#maple-native-b-jtag"><em>above</em></a> for more information on
+these pins.</p>
+</div>
+<table border="1" class="docutils">
+<colgroup>
+<col width="25%" />
+<col width="25%" />
+<col width="25%" />
+<col width="25%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Pin</th>
+<th class="head"><a class="reference internal" href="../gpio.html#gpio"><em>GPIO</em></a></th>
+<th class="head"><a class="reference internal" href="../spi.html#spi"><em>SPI</em></a></th>
+<th class="head">5 V?</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>D101</td>
+<td>PA13</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>Yes</td>
+</tr>
+<tr><td>D102</td>
+<td>PA14</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>Yes</td>
+</tr>
+<tr><td>D103</td>
+<td>PA15</td>
+<td>3_NSS</td>
+<td>Yes</td>
+</tr>
+<tr><td>D104</td>
+<td>PB3</td>
+<td>3_SCK</td>
+<td>Yes</td>
+</tr>
+<tr><td>D105</td>
+<td>PB4</td>
+<td>3_MISO</td>
+<td>Yes</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="gpio-port-pin-map">
+<span id="maple-native-b-gpio-port-map"></span><h3><a class="toc-backref" href="#id7">GPIO Port Pin Map</a><a class="headerlink" href="#gpio-port-pin-map" title="Permalink to this headline">¶</a></h3>
+<p>The following tables show what pins are associated with each
+<a class="reference internal" href="../gpio.html#gpio-ports"><em>GPIO port</em></a>.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="25%" />
+<col width="25%" />
+<col width="25%" />
+<col width="25%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">GPIOA</th>
+<th class="head">GPIOB</th>
+<th class="head">GPIOC</th>
+<th class="head">GPIOD</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>PA0:  D48</td>
+<td>PB0:  D47</td>
+<td>PC0:  D7</td>
+<td>PD0: D64</td>
+</tr>
+<tr><td>PA1:  D49</td>
+<td>PB1:  D46</td>
+<td>PC1:  D8</td>
+<td>PD1: D67</td>
+</tr>
+<tr><td>PA2:  D50</td>
+<td>PB2:  -</td>
+<td>PC2:  D9</td>
+<td>PD2: D27</td>
+</tr>
+<tr><td>PA3:  D51</td>
+<td>PB3:  D104</td>
+<td>PC3:  D10</td>
+<td>PD3: D28</td>
+</tr>
+<tr><td>PA4:  D52</td>
+<td>PB4:  D105</td>
+<td>PC4:  D11</td>
+<td>PD4: D89</td>
+</tr>
+<tr><td>PA5:  D53</td>
+<td>PB5:  D37</td>
+<td>PC5:  D12</td>
+<td>PD5: D86</td>
+</tr>
+<tr><td>PA6:  D54</td>
+<td>PB6:  D38</td>
+<td>PC6:  D13</td>
+<td>PD6: D29</td>
+</tr>
+<tr><td>PA7:  D55</td>
+<td>PB7:  D39</td>
+<td>PC7:  D14</td>
+<td>PD7: -</td>
+</tr>
+<tr><td>PA8:  D23</td>
+<td>PB8:  -</td>
+<td>PC8:  D15</td>
+<td>PD8: D96</td>
+</tr>
+<tr><td>PA9:  D24</td>
+<td>PB9:  D26</td>
+<td>PC9:  D16</td>
+<td>PD9: D98</td>
+</tr>
+<tr><td>PA10: D25</td>
+<td>PB10: D0</td>
+<td>PC10: D17</td>
+<td>PD10: D100</td>
+</tr>
+<tr><td>PA11: -</td>
+<td>PB11: D1</td>
+<td>PC11: D18</td>
+<td>PD11: D57</td>
+</tr>
+<tr><td>PA12: -</td>
+<td>PB12: D2</td>
+<td>PC12: D19</td>
+<td>PD12: D60</td>
+</tr>
+<tr><td>PA13: D101</td>
+<td>PB13: D3</td>
+<td>PC13: D20</td>
+<td>PD13: D63</td>
+</tr>
+<tr><td>PA14: D102</td>
+<td>PB14: D4</td>
+<td>PC14: D21</td>
+<td>PD14: D58</td>
+</tr>
+</tbody>
+</table>
+<table border="1" class="docutils">
+<colgroup>
+<col width="33%" />
+<col width="33%" />
+<col width="33%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">GPIOE</th>
+<th class="head">GPIOF</th>
+<th class="head">GPIOG</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>PE0: D95</td>
+<td>PF0: D56</td>
+<td>PG0: D85</td>
+</tr>
+<tr><td>PE1: D92</td>
+<td>PF1: D59</td>
+<td>PG1: D88</td>
+</tr>
+<tr><td>PE2: -       PF2: D62</td>
+<td>PG2: D91</td>
+<td>&nbsp;</td>
+</tr>
+<tr><td>PE3: D66</td>
+<td>PF3: D65</td>
+<td>PG3: D94</td>
+</tr>
+<tr><td>PE4: D69</td>
+<td>PF4: D68</td>
+<td>PG4: D97</td>
+</tr>
+<tr><td>PE5: D72</td>
+<td>PF5: D71</td>
+<td>PG5: D99</td>
+</tr>
+<tr><td>PE6: D75</td>
+<td>PF6: D41</td>
+<td>PG6: D36</td>
+</tr>
+<tr><td>PE7: D70</td>
+<td>PF7: D42</td>
+<td>PG7: D35</td>
+</tr>
+<tr><td>PE8: D73</td>
+<td>PF8: D43</td>
+<td>PG8: D34</td>
+</tr>
+<tr><td>PE9: D76</td>
+<td>PF9: D44</td>
+<td>PG9: D80</td>
+</tr>
+<tr><td>PE10: D78</td>
+<td>PF10: D45</td>
+<td>PG10: D83</td>
+</tr>
+<tr><td>PE11: D81</td>
+<td>PF11: D40</td>
+<td>PG11: D30</td>
+</tr>
+<tr><td>PE12: D84</td>
+<td>PF12: D74</td>
+<td>PG12: D31</td>
+</tr>
+<tr><td>PE13: D87</td>
+<td>PF13: D77</td>
+<td>PG13: D32</td>
+</tr>
+<tr><td>PE14: D90</td>
+<td>PF14: D79</td>
+<td>PG14: D33</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="timer-pin-map">
+<span id="maple-native-b-timer-map"></span><h3><a class="toc-backref" href="#id8">Timer Pin Map</a><a class="headerlink" href="#timer-pin-map" title="Permalink to this headline">¶</a></h3>
+<p>The following table shows what pins are associated with a particular
+timer&#8217;s capture/compare channels.</p>
+<p>There is no mistake between timers 2 and 5.  They really do share
+those pins.  If you like, you can remap some of the timer 2 channels
+to get extra PWM pins; see <a class="reference internal" href="../libmaple/api/gpio.html#gpio-h-afio-remap"><em>afio_remap() (in gpio.h)</em></a>.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="20%" />
+<col width="20%" />
+<col width="20%" />
+<col width="20%" />
+<col width="20%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Timer</th>
+<th class="head">Ch. 1</th>
+<th class="head">Ch. 2</th>
+<th class="head">Ch. 3</th>
+<th class="head">Ch. 4</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>1</td>
+<td>D23</td>
+<td>D24</td>
+<td>D25</td>
+<td>&nbsp;</td>
+</tr>
+<tr><td>2</td>
+<td>D48</td>
+<td>D49</td>
+<td>D50</td>
+<td>D51</td>
+</tr>
+<tr><td>3</td>
+<td>D54</td>
+<td>D55</td>
+<td>D47</td>
+<td>D46</td>
+</tr>
+<tr><td>4</td>
+<td>D38</td>
+<td>D39</td>
+<td>&nbsp;</td>
+<td>D26</td>
+</tr>
+<tr><td>5</td>
+<td>D48</td>
+<td>D49</td>
+<td>D50</td>
+<td>D51</td>
+</tr>
+<tr><td>8</td>
+<td>D13</td>
+<td>D14</td>
+<td>D15</td>
+<td>D16</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="exti-line-pin-map">
+<span id="maple-native-b-exti-map"></span><h3><a class="toc-backref" href="#id9">EXTI Line Pin Map</a><a class="headerlink" href="#exti-line-pin-map" title="Permalink to this headline">¶</a></h3>
+<p>The following table shows which pins connect to which <a class="reference internal" href="../external-interrupts.html#external-interrupts-exti-line"><em>EXTI lines</em></a>.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="25%" />
+<col width="75%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">EXTI Line</th>
+<th class="head">Pins</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>EXTI0</td>
+<td>D7, D47, D48, D56, D64, D85, D95</td>
+</tr>
+<tr><td>EXTI1</td>
+<td>D8, D46, D49, D59, D67, D88, D92</td>
+</tr>
+<tr><td>EXTI2</td>
+<td>D9, D27, D50, D62, D91</td>
+</tr>
+<tr><td>EXTI3</td>
+<td>D10, D28, D51, D65, D66, D94, D104</td>
+</tr>
+<tr><td>EXTI4</td>
+<td>D11, D52, D68, D69, D89, D97, D105</td>
+</tr>
+<tr><td>EXTI5</td>
+<td>D12, D37, D53, D71, D72, D86, D99</td>
+</tr>
+<tr><td>EXTI6</td>
+<td>D13, D29, D36, D38, D41, D54, D75</td>
+</tr>
+<tr><td>EXTI7</td>
+<td>D14, D35, D39, D42, D55, D70</td>
+</tr>
+<tr><td>EXTI8</td>
+<td>D15, D23, D34, D43, D73, D96</td>
+</tr>
+<tr><td>EXTI9</td>
+<td>D16, D24, D26, D44, D76, D80, D98</td>
+</tr>
+<tr><td>EXTI10</td>
+<td>D0, D17, D25, D45, D78, D83, D100</td>
+</tr>
+<tr><td>EXTI11</td>
+<td>D1, D18, D30, D40, D57, D81</td>
+</tr>
+<tr><td>EXTI12</td>
+<td>D2, D19, D31, D60, D74, D84</td>
+</tr>
+<tr><td>EXTI13</td>
+<td>D3, D20, D32, D63, D77, D87, D101</td>
+</tr>
+<tr><td>EXTI14</td>
+<td>D4, D21, D33, D58, D79, D90, D102</td>
+</tr>
+<tr><td>EXTI15</td>
+<td>D5, D6, D22, D61, D82, D93, D103</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="usart-pin-map">
+<span id="maple-native-b-usart-map"></span><h3><a class="toc-backref" href="#id10">USART Pin Map</a><a class="headerlink" href="#usart-pin-map" title="Permalink to this headline">¶</a></h3>
+<p>The Maple Native has 3 <a class="reference internal" href="../usart.html#usart"><em>USART</em></a> serial ports.  They
+communicate using the pins given in the following table.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="17%" />
+<col width="17%" />
+<col width="17%" />
+<col width="17%" />
+<col width="17%" />
+<col width="17%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Serial port</th>
+<th class="head">TX</th>
+<th class="head">RX</th>
+<th class="head">CK</th>
+<th class="head">CTS</th>
+<th class="head">RTS</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td><tt class="docutils literal"><span class="pre">Serial1</span></tt></td>
+<td>D24</td>
+<td>D25</td>
+<td>D23</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">Serial2</span></tt></td>
+<td>D50</td>
+<td>D51</td>
+<td>D52</td>
+<td>D48</td>
+<td>D49</td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">Serial3</span></tt></td>
+<td>D0</td>
+<td>D1</td>
+<td>D2</td>
+<td>D3</td>
+<td>D4</td>
+</tr>
+</tbody>
+</table>
+<p>The Maple Native also has 2 UART serial ports.  Unlike USARTS, these
+only communicate asynchronously, and thus only have TX and RX pins.
+These are given in the following table.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="33%" />
+<col width="33%" />
+<col width="33%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Serial port</th>
+<th class="head">TX</th>
+<th class="head">RX</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td><tt class="docutils literal"><span class="pre">Serial4</span></tt></td>
+<td>D17</td>
+<td>D18</td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">Serial5</span></tt></td>
+<td>D19</td>
+<td>D27</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="low-noise-adc-pins">
+<span id="maple-native-b-adc-bank"></span><h3><a class="toc-backref" href="#id11">Low-Noise ADC Pins</a><a class="headerlink" href="#low-noise-adc-pins" title="Permalink to this headline">¶</a></h3>
+<p>There are fifteen pins at the bottom right of the board (<tt class="docutils literal"><span class="pre">D41</span></tt> —
+<tt class="docutils literal"><span class="pre">D55</span></tt>) that generally offer lower-noise ADC performance than other
+pins on the board. If you&#8217;re concerned about getting good ADC
+readings, we recommend using one of these pins to take your
+measurements.</p>
+<p>Maple Native has an electrically isolated analog power plane with its
+own regulator, and a geometrically isolated ground plane. Analog input
+pins D41 — D55 are laid out to correspond with these analog planes,
+and our measurements indicate that they generally ofer low noise ADC
+performance.  However, analog performance may vary depending upon the
+activity of other GPIOs.  In particular, using PWM on any of pins
+<tt class="docutils literal"><span class="pre">D46</span></tt> — <tt class="docutils literal"><span class="pre">D51</span></tt>, <tt class="docutils literal"><span class="pre">D54</span></tt>, and <tt class="docutils literal"><span class="pre">D55</span></tt> may cause digital noise.
+Consult the <a class="reference internal" href="#maple-native-b-hardware"><em>Maple Native beta hardware design files</em></a> for more details.</p>
+</div>
+</div>
+<div class="section" id="board-specific-values">
+<span id="maple-native-b-board-values"></span><h2><a class="toc-backref" href="#id12">Board-Specific Values</a><a class="headerlink" href="#board-specific-values" title="Permalink to this headline">¶</a></h2>
+<p>This section lists the Maple Native&#8217;s <a class="reference internal" href="../lang/api/board-values.html#lang-board-values"><em>board-specific values</em></a>.</p>
+<ul>
+<li><p class="first"><tt class="docutils literal"><span class="pre">CYCLES_PER_MICROSECOND</span></tt>: 72</p>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">BOARD_BUTTON_PIN</span></tt>: 6</p>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">BOARD_LED_PIN</span></tt>: 22</p>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">BOARD_NR_GPIO_PINS</span></tt>: 106</p>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">BOARD_NR_PWM_PINS</span></tt>: 18</p>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">boardPWMPins</span></tt>: 13, 14, 15, 16, 23, 24, 25, 26, 38, 39, 46, 47,
+48, 49, 50, 51, 54, 55</p>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">BOARD_NR_ADC_PINS</span></tt>: 21</p>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">boardADCPins</span></tt>: 7, 8, 9, 10, 11, 12, 41, 42, 43, 44, 45, 46, 47,
+48, 49, 50, 51, 52, 53, 54, 55</p>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">BOARD_NR_USED_PINS</span></tt>: 43</p>
+</li>
+<li><dl class="first docutils">
+<dt><tt class="docutils literal"><span class="pre">boardUsedPins</span></tt>: <tt class="docutils literal"><span class="pre">BOARD_LED_PIN</span></tt>, <tt class="docutils literal"><span class="pre">BOARD_BUTTON_PIN</span></tt>,</dt>
+<dd><p class="first last"><tt class="docutils literal"><span class="pre">BOARD_JTMS_SWDIO_PIN</span></tt>, <tt class="docutils literal"><span class="pre">BOARD_JTCK_SWCLK_PIN</span></tt>,
+<tt class="docutils literal"><span class="pre">BOARD_JTDI_PIN</span></tt>, <tt class="docutils literal"><span class="pre">BOARD_JTDO_PIN</span></tt>, <tt class="docutils literal"><span class="pre">BOARD_NJTRST_PIN</span></tt>, and
+all pins on FSMC header except those mentioned <a class="reference internal" href="#maple-native-b-fsmc"><em>above</em></a>.</p>
+</dd>
+</dl>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">BOARD_NR_USARTS</span></tt>: 5</p>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">BOARD_USART1_TX_PIN</span></tt>: 24</p>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">BOARD_USART1_RX_PIN</span></tt>: 25</p>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">BOARD_USART2_TX_PIN</span></tt>: 50</p>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">BOARD_USART2_RX_PIN</span></tt>: 51</p>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">BOARD_USART3_TX_PIN</span></tt>: 0</p>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">BOARD_USART3_RX_PIN</span></tt>: 1</p>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">BOARD_UART4_TX_PIN</span></tt>: 17</p>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">BOARD_UART4_RX_PIN</span></tt>: 18</p>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">BOARD_UART5_TX_PIN</span></tt>: 19</p>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">BOARD_UART5_RX_PIN</span></tt>: 27</p>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">BOARD_NR_SPI</span></tt>: 3</p>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">BOARD_SPI1_NSS_PIN</span></tt>: 52</p>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">BOARD_SPI1_MOSI_PIN</span></tt>: 55</p>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">BOARD_SPI1_MISO_PIN</span></tt>: 54</p>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">BOARD_SPI1_SCK_PIN</span></tt>: 53</p>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">BOARD_SPI2_NSS_PIN</span></tt>: 2</p>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">BOARD_SPI2_MOSI_PIN</span></tt>: 5</p>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">BOARD_SPI2_MISO_PIN</span></tt>: 4</p>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">BOARD_SPI2_SCK_PIN</span></tt>: 3</p>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">BOARD_SPI3_NSS_PIN</span></tt>: 103 (on <a class="reference internal" href="#maple-native-b-jtag"><em>JTAG header</em></a>)</p>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">BOARD_SPI3_MOSI_PIN</span></tt>: 37</p>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">BOARD_SPI3_MISO_PIN</span></tt>: 105 (JTAG header)</p>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">BOARD_SPI3_SCK_PIN</span></tt>: 104 (JTAG header)</p>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">BOARD_JTMS_SWDIO_PIN</span></tt>: <a class="reference internal" href="#maple-native-b-jtag"><em>103</em></a></p>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">BOARD_JTCK_SWCLK_PIN</span></tt>: 102</p>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">BOARD_JTDI_PIN</span></tt>: 103</p>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">BOARD_JTDO_PIN</span></tt>: 104</p>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">BOARD_NJTRST_PIN</span></tt>: 105</p>
+</li>
+</ul>
+<div class="section" id="hardware-design-files">
+<span id="maple-native-b-hardware"></span><h3><a class="toc-backref" href="#id13">Hardware Design Files</a><a class="headerlink" href="#hardware-design-files" title="Permalink to this headline">¶</a></h3>
+<p>The hardware schematics and board layout files are available in the
+<a class="reference external" href="https://github.com/leaflabs/maplenative/">Maple Native GitHub repository</a>.  Download the <a class="reference external" href="https://github.com/leaflabs/maplenative/tree/beta">beta
+version&#8217;s hardware design files</a> (ZIP format).</p>
+<p>If you&#8217;re familiar with Git, you can clone the entire repository and
+checkout the commit tagged &#8220;beta&#8221; using the following:</p>
+<div class="highlight-sh"><div class="highlight"><pre><span class="nv">$ </span>git clone git://github.com/leaflabs/maplenative.git
+<span class="nv">$ </span>git checkout beta
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="failure-modes">
+<h2><a class="toc-backref" href="#id14">Failure Modes</a><a class="headerlink" href="#failure-modes" title="Permalink to this headline">¶</a></h2>
+<p>The following known failure modes apply to the Maple Native Beta.  The
+failure modes aren&#8217;t design errors, but are easy ways to break or
+damage your board permanently.</p>
+<ul>
+<li><p class="first"><strong>Reversing Vin and GND</strong>: when powering the Maple Native Beta via
+the Vin and ground (GND) pins at the top left of the board, it is
+possible to carelessly cause a short or switch the connections,
+applying the high voltage to GND and ground to Vin.</p>
+<p>If this happens, you will reverse bias the diode beneath these pins,
+most likely damaging it.  This may cause excess voltage to
+subsequently be delivered to the board once the reversed pins are
+connected properly.</p>
+</li>
+</ul>
+</div>
+<div class="section" id="errata">
+<h2><a class="toc-backref" href="#id15">Errata</a><a class="headerlink" href="#errata" title="Permalink to this headline">¶</a></h2>
+<p>This section lists known issues and warnings for the Maple Native
+Beta.</p>
+<ul class="simple">
+<li><strong>PWM on pin 39</strong>: PWM on pin 39 appears to be nonfunctional.  We
+are looking into this issue.</li>
+</ul>
+</div>
+<div class="section" id="recommended-reading">
+<h2><a class="toc-backref" href="#id16">Recommended Reading</a><a class="headerlink" href="#recommended-reading" title="Permalink to this headline">¶</a></h2>
+<p id="maple-native-b-stdocs">STMicro documentation for STM32F103ZE microcontroller:</p>
+<ul class="simple">
+<li><a class="reference external" href="http://www.st.com/internet/com/TECHNICAL_RESOURCES/TECHNICAL_LITERATURE/DATASHEET/CD00191185.pdf">Datasheet</a>
+(PDF); covers STM32F103xC, STM3F103xD, STM32F103xE.</li>
+<li><a class="reference external" href="http://www.st.com/internet/com/TECHNICAL_RESOURCES/TECHNICAL_LITERATURE/REFERENCE_MANUAL/CD00171190.pdf">Reference Manual RM0008</a>
+(PDF); definitive resource for peripherals on the STM32F1 line.</li>
+<li><a class="reference external" href="http://www.st.com/internet/com/TECHNICAL_RESOURCES/TECHNICAL_LITERATURE/PROGRAMMING_MANUAL/CD00228163.pdf">Programming Manual PM0056</a>
+(PDF); assembly language and register reference.</li>
+<li><a class="reference external" href="http://www.st.com/internet/mcu/product/164485.jsp">STM32F103RE</a>
+overview page with links to further references.</li>
+</ul>
+<p class="rubric">Footnotes</p>
+<table class="docutils footnote" frame="void" id="fusedpins" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>See <a class="reference internal" href="../lang/api/board-values.html#lang-board-values-used-pins"><em>boardUsedPins</em></a>
+for more information.</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/round_logo_60x60.png" alt="Logo"/>
+            </a></p>
+<h3><a href="../index.html">Table Of Contents</a></h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../maple-quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../maple-ide-install.html">IDE Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ide.html">IDE Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../unix-toolchain.html">Command-Line Toolchain</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../language.html">Language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../libraries.html">Libraries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../arduino-compatibility.html">Arduino Compatibility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../libmaple.html"><tt class="docutils literal"><span class="pre">libmaple</span></tt></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bootloader.html">Bootloader</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../troubleshooting.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../faq.html">FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../arm-gcc.html">GCC and libc for Maple</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../language-index.html">Language Index</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../adc.html">ADC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../external-interrupts.html">External Interrupts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../fsmc.html">FSMC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../gpio.html">GPIO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../i2c.html">I<sup>2</sup>C</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../jtag.html">JTAG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pwm.html">PWM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../spi.html">SPI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../timers.html">Timers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../systick.html">SysTick</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usb.html">USB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usart.html">USART</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="maple.html">Maple</a></li>
+<li class="toctree-l1"><a class="reference internal" href="maple-ret6.html">Maple RET6 Edition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="maple-mini.html">Maple Mini</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Maple Native β</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="maple-mini.html" title="Maple Mini"
+             >previous</a></li>
+    <li><a href="http://leaflabs.com/">LeafLabs</a> |</li>
+    
+        <li><a href="../index.html">Index</a> &raquo;</li>
+ 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010, 2011, LeafLabs, LLC.
+      Last updated on Sep 13, 2011.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>

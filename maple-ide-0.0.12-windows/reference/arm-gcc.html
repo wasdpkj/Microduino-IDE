@@ -1,0 +1,227 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>GCC for Maple &mdash; Maple v0.0.12 Documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/breathe.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.0.12',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/round_logo_32x32.ico"/>
+    <link rel="top" title="Maple v0.0.12 Documentation" href="index.html" />
+    <link rel="next" title="Complete Language Index" href="language-index.html" />
+    <link rel="prev" title="Frequently Asked Questions (FAQ)" href="faq.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="language-index.html" title="Complete Language Index"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="faq.html" title="Frequently Asked Questions (FAQ)"
+             accesskey="P">previous</a> |</li>
+    <li><a href="http://leaflabs.com/">LeafLabs</a> |</li>
+    
+        <li><a href="index.html">Index</a> &raquo;</li>
+ 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="gcc-for-maple">
+<span id="arm-gcc"></span><h1>GCC for Maple<a class="headerlink" href="#gcc-for-maple" title="Permalink to this headline">¶</a></h1>
+<p>This document provides notes on using <tt class="docutils literal"><span class="pre">arm-none-eabi-gcc</span></tt>, the
+<a class="reference external" href="http://www.codesourcery.com/">CodeSourcery</a> version of the GNU <a class="reference external" href="http://gcc.gnu.org/">GCC</a> compilers used for the Maple boards.  It is
+not intended as a reference manual for GCC; such manuals are available
+<a class="reference external" href="http://gcc.gnu.org/">elsewhere</a>.</p>
+<div class="contents local topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#obtaining-arm-none-eabi-gcc" id="id1">Obtaining <tt class="docutils literal"><span class="pre">arm-none-eabi-gcc</span></tt></a></li>
+<li><a class="reference internal" href="#compiler-flags-used-by-libmaple" id="id2">Compiler Flags Used by libmaple</a></li>
+<li><a class="reference internal" href="#using-the-c-standard-library" id="id3">Using the C Standard Library</a></li>
+<li><a class="reference internal" href="#switching-from-avr-gcc" id="id4">Switching from AVR-GCC</a></li>
+</ul>
+</div>
+<div class="section" id="obtaining-arm-none-eabi-gcc">
+<h2><a class="toc-backref" href="#id1">Obtaining <tt class="docutils literal"><span class="pre">arm-none-eabi-gcc</span></tt></a><a class="headerlink" href="#obtaining-arm-none-eabi-gcc" title="Permalink to this headline">¶</a></h2>
+<p>Recent versions of <tt class="docutils literal"><span class="pre">arm-none-eabi-gcc</span></tt> and associated tools are
+included with the <a class="reference internal" href="ide.html#ide"><em>Maple IDE</em></a>.</p>
+<p>Users who wish to use <tt class="docutils literal"><span class="pre">arm-none-eabi-gcc</span></tt> directly, along with a
+standard Unix Make-based toolchain, should read the
+<a class="reference internal" href="unix-toolchain.html#unix-toolchain"><em>Unix Toolchain Quickstart</em></a>, which describes how to set up such an
+environment.</p>
+<p>LeafLabs maintains <a class="reference external" href="http://static.leaflabs.com/pub/codesourcery/">mirrors</a> for some of the more
+recent versions of the compiler, including versions for OS X, Win32,
+and 32-bit Linux.</p>
+</div>
+<div class="section" id="compiler-flags-used-by-libmaple">
+<h2><a class="toc-backref" href="#id2">Compiler Flags Used by libmaple</a><a class="headerlink" href="#compiler-flags-used-by-libmaple" title="Permalink to this headline">¶</a></h2>
+<p>This section documents the flags passed to <tt class="docutils literal"><span class="pre">arm-none-eabi-gcc</span></tt> by
+the <a class="reference internal" href="ide.html#ide"><em>Maple IDE</em></a> and the default Makefile provided with the
+<a class="reference internal" href="unix-toolchain.html#unix-toolchain"><em>Unix toolchain</em></a>.  The information in this
+section is subject to change between <a class="reference internal" href="libmaple.html#libmaple"><em>libmaple</em></a>
+releases.</p>
+<p>The following flags are among those passed to the C compiler:</p>
+<div class="highlight-sh"><div class="highlight"><pre>-Os -g -mcpu<span class="o">=</span>cortex-m3 -mthumb -march<span class="o">=</span>armv7-m -nostdlib
+-ffunction-sections -fdata-sections -Wl,--gc-sections
+</pre></div>
+</div>
+<p>In addition to those flags just given for the C compiler, the
+following flags are among those passed to the C++ compiler:</p>
+<div class="highlight-sh"><div class="highlight"><pre>-fno-rtti -fno-exceptions -Wall
+</pre></div>
+</div>
+<p>The following flags are among those passed to the assembler:</p>
+<div class="highlight-sh"><div class="highlight"><pre>-mcpu<span class="o">=</span>cortex-m3 -march<span class="o">=</span>armv7-m -mthumb
+</pre></div>
+</div>
+</div>
+<div class="section" id="using-the-c-standard-library">
+<span id="arm-gcc-avr-gcc"></span><h2><a class="toc-backref" href="#id3">Using the C Standard Library</a><a class="headerlink" href="#using-the-c-standard-library" title="Permalink to this headline">¶</a></h2>
+<p>By default (under both the <a class="reference internal" href="ide.html#ide"><em>Maple IDE</em></a> and the <a class="reference internal" href="unix-toolchain.html#unix-toolchain"><em>Unix
+toolchain</em></a>), <tt class="docutils literal"><span class="pre">arm-none-eabi-gcc</span></tt> is configured to
+link against <a class="reference external" href="http://sourceware.org/newlib/">newlib</a>, a C standard
+library intended for use with embedded applications.  You are free to
+include of any of its headers.</p>
+</div>
+<div class="section" id="switching-from-avr-gcc">
+<h2><a class="toc-backref" href="#id4">Switching from AVR-GCC</a><a class="headerlink" href="#switching-from-avr-gcc" title="Permalink to this headline">¶</a></h2>
+<p>This section, which is expected to grow over time, describes
+techniques for porting code which uses AVR-GCC features (AVR-GCC is
+the compiler used by many Atmel AVR-based microcontroller boards,
+including Arduino) for use on the Maple.</p>
+<ul id="arm-gcc-attribute-flash">
+<li><p class="first">Replacing <tt class="docutils literal"><span class="pre">PROGMEM</span></tt>: If you need to store a lot of constant data,
+you can store variables in Flash (instead of RAM) by using the
+libmaple macro <tt class="docutils literal"><span class="pre">__FLASH__</span></tt>.  Here&#8217;s an example:</p>
+<div class="highlight-cpp"><div class="highlight"><pre><span class="n">uint32</span> <span class="n">array</span><span class="p">[]</span> <span class="n">__FLASH__</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">};</span>
+</pre></div>
+</div>
+<p>This will help you save RAM when you need to store large amounts of
+data, like look-up tables.</p>
+<p>You can only store values which are compile-time constants (like
+numbers and strings, and arrays of numbers and strings) in this way.
+Also, if you try to change a variable stored in Flash, your program
+will crash.</p>
+<p>If you need to port over AVR/Arduino code that uses pgmspace.h,
+these declarations may help you:</p>
+<div class="highlight-cpp"><div class="highlight"><pre><span class="k">typedef</span> <span class="k">const</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="n">prog_uchar</span><span class="p">;</span>
+<span class="cp">#define pgm_read_byte_near(x) (*(prog_uchar*)x)</span>
+<span class="cp">#define pgm_read_byte(x) (*(prog_uchar*)x)</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/round_logo_60x60.png" alt="Logo"/>
+            </a></p>
+<h3><a href="index.html">Table Of Contents</a></h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="maple-quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="maple-ide-install.html">IDE Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ide.html">IDE Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="unix-toolchain.html">Command-Line Toolchain</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="language.html">Language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="libraries.html">Libraries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="arduino-compatibility.html">Arduino Compatibility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="libmaple.html"><tt class="docutils literal"><span class="pre">libmaple</span></tt></a></li>
+<li class="toctree-l1"><a class="reference internal" href="bootloader.html">Bootloader</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">FAQ</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">GCC and libc for Maple</a></li>
+<li class="toctree-l1"><a class="reference internal" href="language-index.html">Language Index</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="adc.html">ADC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="external-interrupts.html">External Interrupts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fsmc.html">FSMC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gpio.html">GPIO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="i2c.html">I<sup>2</sup>C</a></li>
+<li class="toctree-l1"><a class="reference internal" href="jtag.html">JTAG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pwm.html">PWM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="spi.html">SPI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="timers.html">Timers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="systick.html">SysTick</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usb.html">USB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usart.html">USART</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="hardware/maple.html">Maple</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hardware/maple-ret6.html">Maple RET6 Edition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hardware/maple-mini.html">Maple Mini</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hardware/maple-native-beta.html">Maple Native β</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="language-index.html" title="Complete Language Index"
+             >next</a></li>
+        <li class="right" >
+          <a href="faq.html" title="Frequently Asked Questions (FAQ)"
+             >previous</a> |</li>
+    <li><a href="http://leaflabs.com/">LeafLabs</a> |</li>
+    
+        <li><a href="index.html">Index</a> &raquo;</li>
+ 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010, 2011, LeafLabs, LLC.
+      Last updated on Sep 13, 2011.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>

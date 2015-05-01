@@ -1,0 +1,193 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>USB &mdash; Maple v0.0.12 Documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/breathe.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.0.12',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/round_logo_32x32.ico"/>
+    <link rel="top" title="Maple v0.0.12 Documentation" href="index.html" />
+    <link rel="next" title="USART" href="usart.html" />
+    <link rel="prev" title="SysTick" href="systick.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="usart.html" title="USART"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="systick.html" title="SysTick"
+             accesskey="P">previous</a> |</li>
+    <li><a href="http://leaflabs.com/">LeafLabs</a> |</li>
+    
+        <li><a href="index.html">Index</a> &raquo;</li>
+ 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="usb">
+<span id="id1"></span><h1>USB<a class="headerlink" href="#usb" title="Permalink to this headline">¶</a></h1>
+<p>The STM32 microprocessors include a dedicated USB peripheral which can
+be configured to act as a general USB slave device with transfer rates
+up to 12Mbps. (It unfortunately can&#8217;t be configured as a host or
+on-the-go device).  By default, the peripheral is configured for two
+uses: first, to receive sketch/program uploads from the <a class="reference internal" href="ide.html#ide"><em>IDE</em></a>, and second, to emulate a regular serial port for use as a
+terminal (text read/write).</p>
+<p>The emulated terminal is relatively slow and inefficient; it is best
+for transferring data at regular serial speeds (kilobaud).  Library
+support for accessing the emulated terminal is available at the
+<a class="reference internal" href="lang/api/serialusb.html#lang-serialusb"><em>SerialUSB</em></a> reference.</p>
+<p>The SerialUSB channel is used with the <a class="reference internal" href="bootloader.html#bootloader"><em>Maple bootloader</em></a> to reprogram the board: a <a class="reference internal" href="bootloader.html#bootloader-rev3"><em>magic sequence of
+control line toggles and transmitted data</em></a> causes a
+Maple to reset itself and enter bootloader mode. As an unfortunate
+consequence, the auto-reset will not work if the IDE can not access
+the serial port, either due to a conflict with another program (serial
+monitor) or because the interface has been disabled from the Maple
+side (through <a class="reference internal" href="lang/api/serialusb.html#lang-serialusb-end"><em>SerialUSB.end()</em></a>).  A
+solution to the second problem is the use of <a class="reference internal" href="troubleshooting.html#troubleshooting-perpetual-bootloader"><em>perpetual
+bootloader mode</em></a>.</p>
+<div class="section" id="recommended-reading">
+<h2>Recommended Reading<a class="headerlink" href="#recommended-reading" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p class="first"><a class="reference external" href="http://www.beyondlogic.org/usbnutshell/usb1.shtml">USB in a Nutshell</a>, an overview from Beyond Logic</p>
+</li>
+<li><p class="first"><a class="reference external" href="http://www.usbmadesimple.co.uk/">USB made simple</a>, an illustrated series of articles on USB</p>
+</li>
+<li><p class="first">The <a class="reference external" href="http://www.usb.org/developers/docs/">USB 2.0 Specification</a> (<a class="reference external" href="http://www.usb.org/developers/docs/usb_20_021411.zip">direct link</a>)</p>
+</li>
+<li><p class="first"><a class="reference external" href="http://www.computer-solutions.co.uk/info/Embedded_tutorials/usb_tutorial.htm">Embedded USB - a brief tutorial</a></p>
+</li>
+<li><p class="first"><a class="reference external" href="http://en.wikipedia.org/wiki/Universal_Serial_Bus">Wikipedia article on Universal Serial Bus (USB)</a></p>
+</li>
+<li><p class="first">Linux Kernel documentation for <a class="reference external" href="http://www.kernel.org/doc/Documentation/usb/acm.txt">USB ACM</a> and <a class="reference external" href="http://www.kernel.org/doc/Documentation/usb/usb-serial.txt">USB Serial</a></p>
+</li>
+<li><p class="first"><a class="reference external" href="http://belcarra.com/usb_glossary.html">USB Glossary of Terms</a></p>
+</li>
+<li><dl class="first docutils">
+<dt>ST documentation:</dt>
+<dd><ul class="first last simple">
+<li>Reference Manual <a class="reference external" href="http://www.st.com/stonline/products/literature/rm/13902.pdf">RM0008</a>
+(PDF), Chapter 23, &#8220;Universal serial bus full-speed device
+interface&#8221;</li>
+<li><a class="reference external" href="http://www.st.com/stonline/products/literature/pm/15491.pdf">Programming Manual</a>
+(PDF; assembly language and register reference)</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/round_logo_60x60.png" alt="Logo"/>
+            </a></p>
+<h3><a href="index.html">Table Of Contents</a></h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="maple-quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="maple-ide-install.html">IDE Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ide.html">IDE Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="unix-toolchain.html">Command-Line Toolchain</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="language.html">Language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="libraries.html">Libraries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="arduino-compatibility.html">Arduino Compatibility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="libmaple.html"><tt class="docutils literal"><span class="pre">libmaple</span></tt></a></li>
+<li class="toctree-l1"><a class="reference internal" href="bootloader.html">Bootloader</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="arm-gcc.html">GCC and libc for Maple</a></li>
+<li class="toctree-l1"><a class="reference internal" href="language-index.html">Language Index</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="adc.html">ADC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="external-interrupts.html">External Interrupts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fsmc.html">FSMC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gpio.html">GPIO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="i2c.html">I<sup>2</sup>C</a></li>
+<li class="toctree-l1"><a class="reference internal" href="jtag.html">JTAG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pwm.html">PWM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="spi.html">SPI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="timers.html">Timers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="systick.html">SysTick</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">USB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usart.html">USART</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="hardware/maple.html">Maple</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hardware/maple-ret6.html">Maple RET6 Edition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hardware/maple-mini.html">Maple Mini</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hardware/maple-native-beta.html">Maple Native β</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="usart.html" title="USART"
+             >next</a></li>
+        <li class="right" >
+          <a href="systick.html" title="SysTick"
+             >previous</a> |</li>
+    <li><a href="http://leaflabs.com/">LeafLabs</a> |</li>
+    
+        <li><a href="index.html">Index</a> &raquo;</li>
+ 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010, 2011, LeafLabs, LLC.
+      Last updated on Sep 13, 2011.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>

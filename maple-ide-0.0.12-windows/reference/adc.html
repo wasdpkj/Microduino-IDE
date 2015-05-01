@@ -1,0 +1,227 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>ADC &mdash; Maple v0.0.12 Documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/breathe.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.0.12',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/round_logo_32x32.ico"/>
+    <link rel="top" title="Maple v0.0.12 Documentation" href="index.html" />
+    <link rel="next" title="External Interrupts" href="external-interrupts.html" />
+    <link rel="prev" title="String" href="lang/unimplemented/stringobject.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="external-interrupts.html" title="External Interrupts"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="lang/unimplemented/stringobject.html" title="String"
+             accesskey="P">previous</a> |</li>
+    <li><a href="http://leaflabs.com/">LeafLabs</a> |</li>
+    
+        <li><a href="index.html">Index</a> &raquo;</li>
+ 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="adc">
+<span id="id1"></span><h1>ADC<a class="headerlink" href="#adc" title="Permalink to this headline">¶</a></h1>
+<p>Analog to digital conversion is the process of reading a physical
+voltage as a number.  Maple can convert voltages between 0 and 3.3V to
+numbers between 0 and 4095.</p>
+<div class="contents local topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#adc-on-maple" id="id2">ADC On Maple</a></li>
+<li><a class="reference internal" href="#function-reference" id="id3">Function Reference</a></li>
+<li><a class="reference internal" href="#noise-and-bias" id="id4">Noise and Bias</a></li>
+<li><a class="reference internal" href="#recommended-reading" id="id5">Recommended Reading</a></li>
+</ul>
+</div>
+<div class="section" id="adc-on-maple">
+<h2><a class="toc-backref" href="#id2">ADC On Maple</a><a class="headerlink" href="#adc-on-maple" title="Permalink to this headline">¶</a></h2>
+<p>Doing analog-to-digital conversion on the Maple is simple.
+<a class="reference internal" href="ide.html#ide"><em>Maple IDE</em></a> contains a basic example.  To see it, choose
+Analog &gt; AnalogInSerial from the <a class="reference internal" href="ide.html#ide-examples"><em>examples menu</em></a>.</p>
+<p>In order to set up your board for conversion, first connect the wire
+(potentiometer, etc.)  with the voltage you want to measure to a
+<a class="reference internal" href="gpio.html#gpio"><em>pin</em></a> which can perform ADC.  Each pin which can do ADC
+has &#8220;AIN&#8221; (or &#8220;ain&#8221;) written next to the the pin number.  Then, as in
+the example program, set the chosen pin&#8217;s <a class="reference internal" href="lang/api/pinmode.html#lang-pinmode"><em>pin mode</em></a> to <tt class="docutils literal"><span class="pre">INPUT_ANALOG</span></tt> by calling <tt class="docutils literal"><span class="pre">pinMode(&lt;your_pin&gt;,</span>
+<span class="pre">INPUT_ANALOG)</span></tt>.  You will usually do this in your <a class="reference internal" href="lang/api/setup.html#lang-setup"><em>setup()</em></a>
+function.  Now you can use <a class="reference internal" href="lang/api/analogread.html#lang-analogread"><em>analogRead()</em></a> to perform an ADC
+reading.</p>
+</div>
+<div class="section" id="function-reference">
+<span id="adc-function-reference"></span><h2><a class="toc-backref" href="#id3">Function Reference</a><a class="headerlink" href="#function-reference" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="lang/api/analogread.html#lang-analogread"><em>analogRead()</em></a></li>
+<li><a class="reference internal" href="lang/api/pinmode.html#lang-pinmode"><em>pinMode()</em></a></li>
+<li><a class="reference internal" href="libmaple/api/adc.html#libmaple-adc"><em>adc.h</em></a> (low-level ADC support)</li>
+</ul>
+</div>
+<div class="section" id="noise-and-bias">
+<span id="adc-noise-bias"></span><h2><a class="toc-backref" href="#id4">Noise and Bias</a><a class="headerlink" href="#noise-and-bias" title="Permalink to this headline">¶</a></h2>
+<p>Maple has a large number of pins which are capable of taking 12-bit
+ADC measurements, which means that voltages from 0 to 3.3V are read as
+numbers from 0 to 4095.  In theory, this means that a change in
+voltage of about 1 millivolt should change the numeric voltage reading
+by 1.  In reality, however, a number of issues introduce noise and
+bias into this reading, and a number of techniques must be used to get
+good precision and accuracy.</p>
+<p>In order to allow for good readings, LeafLabs has tried to isolate at
+least some of each board&#8217;s ADC pins and traces from strong noise
+sources.  However, there are always trade-offs between noise,
+additional functionality, cost, and package size.  More information on
+these isolated pins is available in each board&#8217;s hardware
+documentation:</p>
+<ul class="simple">
+<li><a class="reference internal" href="hardware/maple.html#maple-adc-bank"><em>Maple</em></a></li>
+<li><a class="reference internal" href="hardware/maple-ret6.html#maple-ret6-adc-bank"><em>Maple RET6 Edition</em></a></li>
+<li><a class="reference internal" href="hardware/maple-mini.html#maple-mini-adc-bank"><em>Maple Mini</em></a></li>
+<li><a class="reference internal" href="hardware/maple-native-beta.html#maple-native-b-adc-bank"><em>Maple Native Beta</em></a></li>
+</ul>
+<p>That said, there are a number of more general things you can do to try
+to get good readings.  If your input voltage changes relatively
+slowly, a number of samples can be taken in succession and averaged
+together, or the same voltage can even be sampled by multiple ADC pins
+at the same time.</p>
+<p>Another important factor when taking a voltage reading is the
+reference voltages that the sample is being compared against.  For
+Maple, the high reference is V<sub>DDA</sub> and the low reference is ground.
+This means that noise or fluctuations on either V<sub>DDA</sub> or ground will
+affect the measurement. It also means that the voltage you are trying
+to sample must be between ground and 3.3 V.</p>
+<p id="adc-range">In the case of a variable reading, it is best if the voltage varies
+over the entire range of 0 through 3.3 V; otherwise, only a fraction
+of the sensitivity is being used.  Some basic tools to accomplish this
+are <a class="reference external" href="http://en.wikipedia.org/wiki/Voltage_divider">resistor dividers</a> and <a class="reference external" href="http://en.wikipedia.org/wiki/Voltage_source#Zener_voltage_source">Zener diodes</a>.  However, <a class="reference external" href="http://en.wikipedia.org/wiki/Operational_amplifier">operational amplifiers</a> and other
+powered components can also be used if greater precision is required.</p>
+</div>
+<div class="section" id="recommended-reading">
+<span id="adc-recommended-reading"></span><h2><a class="toc-backref" href="#id5">Recommended Reading</a><a class="headerlink" href="#recommended-reading" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference external" href="http://en.wikipedia.org/wiki/Analog-to-digital_converter">Wikipedia: Analog-to-Digital Converter</a></li>
+<li><a class="reference external" href="http://arduino.cc/en/Tutorial/AnalogInputPins">Arduino Analog Input Tutorial</a></li>
+<li>ST documentation:<ul>
+<li><a class="reference external" href="http://www.st.com/stonline/products/literature/an/16840.pdf">Application Note on ADC Modes</a> (PDF)</li>
+<li><a class="reference external" href="http://www.st.com/stonline/products/literature/an/14183.pdf">Application Note on ADC Oversampling</a> (PDF)</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/round_logo_60x60.png" alt="Logo"/>
+            </a></p>
+<h3><a href="index.html">Table Of Contents</a></h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="maple-quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="maple-ide-install.html">IDE Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ide.html">IDE Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="unix-toolchain.html">Command-Line Toolchain</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="language.html">Language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="libraries.html">Libraries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="arduino-compatibility.html">Arduino Compatibility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="libmaple.html"><tt class="docutils literal"><span class="pre">libmaple</span></tt></a></li>
+<li class="toctree-l1"><a class="reference internal" href="bootloader.html">Bootloader</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="arm-gcc.html">GCC and libc for Maple</a></li>
+<li class="toctree-l1"><a class="reference internal" href="language-index.html">Language Index</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="">ADC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="external-interrupts.html">External Interrupts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fsmc.html">FSMC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gpio.html">GPIO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="i2c.html">I<sup>2</sup>C</a></li>
+<li class="toctree-l1"><a class="reference internal" href="jtag.html">JTAG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pwm.html">PWM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="spi.html">SPI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="timers.html">Timers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="systick.html">SysTick</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usb.html">USB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usart.html">USART</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="hardware/maple.html">Maple</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hardware/maple-ret6.html">Maple RET6 Edition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hardware/maple-mini.html">Maple Mini</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hardware/maple-native-beta.html">Maple Native β</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="external-interrupts.html" title="External Interrupts"
+             >next</a></li>
+        <li class="right" >
+          <a href="lang/unimplemented/stringobject.html" title="String"
+             >previous</a> |</li>
+    <li><a href="http://leaflabs.com/">LeafLabs</a> |</li>
+    
+        <li><a href="index.html">Index</a> &raquo;</li>
+ 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010, 2011, LeafLabs, LLC.
+      Last updated on Sep 13, 2011.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>
