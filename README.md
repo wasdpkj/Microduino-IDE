@@ -1,4 +1,4 @@
-Microduino-IDE
+ï»¿Microduino-IDE
 ==============
 Microduino wiki:
 http://wiki.microduino.cc
@@ -13,4 +13,4 @@ pankejia@microduino.cc
 
 ==============
 Weibo:
-@ÀÏÅËorz
+@è€æ½˜orz
