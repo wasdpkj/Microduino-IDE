@@ -16,7 +16,9 @@
 ** SOFTWARE.  
 */
 
+#include "Platform.h"
 #include "USBAPI.h"
+#include "USBDesc.h"
 
 #if defined(USBCON)
 
@@ -37,8 +39,8 @@ volatile u8 RxLEDPulse; /**< Milliseconds remaining for data Rx LED pulse */
 //==================================================================
 
 extern const u16 STRING_LANGUAGE[] PROGMEM;
-extern const u8 STRING_PRODUCT[] PROGMEM;
-extern const u8 STRING_MANUFACTURER[] PROGMEM;
+extern const u16 STRING_IPRODUCT[] PROGMEM;
+extern const u16 STRING_IMANUFACTURER[] PROGMEM;
 extern const DeviceDescriptor USB_DeviceDescriptor PROGMEM;
 extern const DeviceDescriptor USB_DeviceDescriptorA PROGMEM;
 
@@ -47,30 +49,31 @@ const u16 STRING_LANGUAGE[2] = {
 	0x0409	// English
 };
 
-#ifndef USB_PRODUCT
-// If no product is provided, use USB IO Board
-#define USB_PRODUCT     "USB IO Board"
+const u16 STRING_IPRODUCT[17] = {
+	(3<<8) | (2+2*16),
+#if USB_PID == 0x8036	
+	'A','r','d','u','i','n','o',' ','L','e','o','n','a','r','d','o'
+#elif USB_PID == 0x8037
+	'A','r','d','u','i','n','o',' ','M','i','c','r','o',' ',' ',' '
+#elif USB_PID == 0x803C
+	'A','r','d','u','i','n','o',' ','E','s','p','l','o','r','a',' '
+#elif USB_PID == 0x9208
+	'L','i','l','y','P','a','d','U','S','B',' ',' ',' ',' ',' ',' '
+#else
+	'U','S','B',' ','I','O',' ','B','o','a','r','d',' ',' ',' ',' '
 #endif
+};
 
-const u8 STRING_PRODUCT[] PROGMEM = USB_PRODUCT;
-
+const u16 STRING_IMANUFACTURER[12] = {
+	(3<<8) | (2+2*11),
 #if USB_VID == 0x2341
-#  if defined(USB_MANUFACTURER)
-#    undef USB_MANUFACTURER
-#  endif
-#  define USB_MANUFACTURER "Arduino LLC"
+	'A','r','d','u','i','n','o',' ','L','L','C'
 #elif USB_VID == 0x1b4f
-#  if defined(USB_MANUFACTURER)
-#    undef USB_MANUFACTURER
-#  endif
-#  define USB_MANUFACTURER "SparkFun"
-#elif !defined(USB_MANUFACTURER)
-// Fall through to unknown if no manufacturer name was provided in a macro
-#  define USB_MANUFACTURER "Unknown"
+	'S','p','a','r','k','F','u','n',' ',' ',' '
+#else
+	'U','n','k','n','o','w','n',' ',' ',' ',' '
 #endif
-
-const u8 STRING_MANUFACTURER[] PROGMEM = USB_MANUFACTURER;
-
+};
 
 #ifdef CDC_ENABLED
 #define DEVICE_CLASS 0x02
@@ -92,8 +95,7 @@ volatile u8 _usbConfiguration = 0;
 
 static inline void WaitIN(void)
 {
-	while (!(UEINTX & (1<<TXINI)))
-		;
+	while (!(UEINTX & (1<<TXINI)));
 }
 
 static inline void ClearIN(void)
@@ -273,6 +275,7 @@ int USB_Send(u8 ep, const void* d, int len)
 
 	int r = len;
 	const u8* data = (const u8*)d;
+	u8 zero = ep & TRANSFER_ZERO;
 	u8 timeout = 250;		// 250ms timeout on send? TODO
 	while (len)
 	{
@@ -287,12 +290,9 @@ int USB_Send(u8 ep, const void* d, int len)
 
 		if (n > len)
 			n = len;
+		len -= n;
 		{
 			LockEP lock(ep);
-			// Frame may have been released by the SOF interrupt handler
-			if (!ReadWriteAllowed())
-				continue;
-			len -= n;
 			if (ep & TRANSFER_ZERO)
 			{
 				while (n--)
@@ -416,22 +416,6 @@ int USB_SendControl(u8 flags, const void* d, int len)
 	return sent;
 }
 
-// Send a USB descriptor string. The string is stored in PROGMEM as a
-// plain ASCII string but is sent out as UTF-16 with the correct 2-byte
-// prefix
-static bool USB_SendStringDescriptor(const u8*string_P, u8 string_len) {
-        SendControl(2 + string_len * 2);
-        SendControl(3);
-        for(u8 i = 0; i < string_len; i++) {
-                bool r = SendControl(pgm_read_byte(&string_P[i]));
-                r &= SendControl(0); // high byte
-                if(!r) {
-                        return false;
-                }
-        }
-        return true;
-}
-
 //	Does not timeout or cross fifo boundaries
 //	Will only work for transfers <= 64 bytes
 //	TODO
@@ -492,6 +476,7 @@ bool SendDescriptor(Setup& setup)
 		return HID_GetDescriptor(t);
 #endif
 
+	u8 desc_length = 0;
 	const u8* desc_addr = 0;
 	if (USB_DEVICE_DESCRIPTOR_TYPE == t)
 	{
@@ -501,22 +486,20 @@ bool SendDescriptor(Setup& setup)
 	}
 	else if (USB_STRING_DESCRIPTOR_TYPE == t)
 	{
-		if (setup.wValueL == 0) {
+		if (setup.wValueL == 0)
 			desc_addr = (const u8*)&STRING_LANGUAGE;
-		}
-		else if (setup.wValueL == IPRODUCT) {
-			return USB_SendStringDescriptor(STRING_PRODUCT, strlen(USB_PRODUCT));
-		}
-		else if (setup.wValueL == IMANUFACTURER) {
-			return USB_SendStringDescriptor(STRING_MANUFACTURER, strlen(USB_MANUFACTURER));
-		}
+		else if (setup.wValueL == IPRODUCT) 
+			desc_addr = (const u8*)&STRING_IPRODUCT;
+		else if (setup.wValueL == IMANUFACTURER)
+			desc_addr = (const u8*)&STRING_IMANUFACTURER;
 		else
 			return false;
 	}
 
 	if (desc_addr == 0)
 		return false;
-	u8 desc_length = pgm_read_byte(desc_addr);
+	if (desc_length == 0)
+		desc_length = pgm_read_byte(desc_addr);
 
 	USB_SendControl(TRANSFER_PGM,desc_addr,desc_length);
 	return true;
@@ -628,6 +611,8 @@ ISR(USB_GEN_vect)
 	{
 #ifdef CDC_ENABLED
 		USB_Flush(CDC_TX);				// Send a tx frame if found
+		if (USB_Available(CDC_RX))	// Handle received bytes (if any)
+			Serial.accept();
 #endif
 		
 		// check whether the one-shot period has elapsed.  if so, turn off the LED
