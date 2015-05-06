@@ -145,7 +145,7 @@ menu.cpu=Processor
 
 ##Microduino Core+ (1284pa)
 ##############################################################
-1284p.name= Microduino Core+ (1284pa)
+1284p.name= Microduino Core+ (1284p)
 
 1284p.upload.tool=avrdude
 1284p.upload.protocol=arduino
@@ -160,7 +160,7 @@ menu.cpu=Processor
 
 ## ATmega1284 16M
 ## -------------------------------------------------
-1284p.menu.cpu.16MHzatmega1284=Atmega1284pa@16M,5V
+1284p.menu.cpu.16MHzatmega1284=Atmega1284p@16M,5V
 
 1284p.menu.cpu.16MHzatmega1284.upload.maximum_size=130048
 1284p.menu.cpu.16MHzatmega1284.upload.maximum_data_size=16384
@@ -176,7 +176,7 @@ menu.cpu=Processor
 
 ## ATmega1284 8M
 ## --------------------------------------------------
-1284p.menu.cpu.8MHzatmega1284=Atmega1284pa@8M,3.3V
+1284p.menu.cpu.8MHzatmega1284=Atmega1284p@8M,3.3V
 
 1284p.menu.cpu.8MHzatmega1284.upload.maximum_size=130048
 1284p.menu.cpu.8MHzatmega1284.upload.maximum_data_size=16384

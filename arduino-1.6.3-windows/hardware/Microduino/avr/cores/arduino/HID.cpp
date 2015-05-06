@@ -1,32 +1,41 @@
 
 
-/* Copyright (c) 2011, Peter Barrett  
-**  
-** Permission to use, copy, modify, and/or distribute this software for  
-** any purpose with or without fee is hereby granted, provided that the  
-** above copyright notice and this permission notice appear in all copies.  
-** 
-** THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL  
-** WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED  
-** WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR  
-** BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES  
-** OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,  
-** WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION,  
-** ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS  
-** SOFTWARE.  
+/* Copyright (c) 2011, Peter Barrett
+**
+** Permission to use, copy, modify, and/or distribute this software for
+** any purpose with or without fee is hereby granted, provided that the
+** above copyright notice and this permission notice appear in all copies.
+**
+** THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL
+** WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED
+** WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR
+** BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES
+** OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,
+** WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION,
+** ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS
+** SOFTWARE.
 */
 
+#include "Platform.h"
 #include "USBAPI.h"
+#include "USBDesc.h"
 
 #if defined(USBCON)
 #ifdef HID_ENABLED
 
+// *** This used to be RAWHID_ENABLED
 //#define RAWHID_ENABLED
+#define KBAM_ENABLED
+#define JOYHID_ENABLED
 
 //	Singletons for mouse and keyboard
 
 Mouse_ Mouse;
 Keyboard_ Keyboard;
+
+// *** Add a joystick too
+
+Joystick_ Joystick;
 
 //================================================================================
 //================================================================================
@@ -43,66 +52,68 @@ Keyboard_ Keyboard;
 
 extern const u8 _hidReportDescriptor[] PROGMEM;
 const u8 _hidReportDescriptor[] = {
-	
+
+#ifdef KBAM_ENABLED
 	//	Mouse
-    0x05, 0x01,                    // USAGE_PAGE (Generic Desktop)	// 54
-    0x09, 0x02,                    // USAGE (Mouse)
-    0xa1, 0x01,                    // COLLECTION (Application)
-    0x09, 0x01,                    //   USAGE (Pointer)
-    0xa1, 0x00,                    //   COLLECTION (Physical)
-    0x85, 0x01,                    //     REPORT_ID (1)
-    0x05, 0x09,                    //     USAGE_PAGE (Button)
-    0x19, 0x01,                    //     USAGE_MINIMUM (Button 1)
-    0x29, 0x03,                    //     USAGE_MAXIMUM (Button 3)
-    0x15, 0x00,                    //     LOGICAL_MINIMUM (0)
-    0x25, 0x01,                    //     LOGICAL_MAXIMUM (1)
-    0x95, 0x03,                    //     REPORT_COUNT (3)
-    0x75, 0x01,                    //     REPORT_SIZE (1)
-    0x81, 0x02,                    //     INPUT (Data,Var,Abs)
-    0x95, 0x01,                    //     REPORT_COUNT (1)
-    0x75, 0x05,                    //     REPORT_SIZE (5)
-    0x81, 0x03,                    //     INPUT (Cnst,Var,Abs)
-    0x05, 0x01,                    //     USAGE_PAGE (Generic Desktop)
-    0x09, 0x30,                    //     USAGE (X)
-    0x09, 0x31,                    //     USAGE (Y)
-    0x09, 0x38,                    //     USAGE (Wheel)
-    0x15, 0x81,                    //     LOGICAL_MINIMUM (-127)
-    0x25, 0x7f,                    //     LOGICAL_MAXIMUM (127)
-    0x75, 0x08,                    //     REPORT_SIZE (8)
-    0x95, 0x03,                    //     REPORT_COUNT (3)
-    0x81, 0x06,                    //     INPUT (Data,Var,Rel)
-    0xc0,                          //   END_COLLECTION
-    0xc0,                          // END_COLLECTION
+	0x05, 0x01,			// USAGE_PAGE (Generic Desktop)	// 54
+	0x09, 0x02,			// USAGE (Mouse)
+	0xa1, 0x01,			// COLLECTION (Application)
+	0x09, 0x01,			//   USAGE (Pointer)
+	0xa1, 0x00,			//   COLLECTION (Physical)
+	0x85, 0x01,			//     REPORT_ID (1)
+	0x05, 0x09,			//     USAGE_PAGE (Button)
+	0x19, 0x01,			//     USAGE_MINIMUM (Button 1)
+	0x29, 0x03,			//     USAGE_MAXIMUM (Button 3)
+	0x15, 0x00,			//     LOGICAL_MINIMUM (0)
+	0x25, 0x01,			//     LOGICAL_MAXIMUM (1)
+	0x95, 0x03,			//     REPORT_COUNT (3)
+	0x75, 0x01,			//     REPORT_SIZE (1)
+	0x81, 0x02,			//     INPUT (Data,Var,Abs)
+	0x95, 0x01,			//     REPORT_COUNT (1)
+	0x75, 0x05,			//     REPORT_SIZE (5)
+	0x81, 0x03,			//     INPUT (Cnst,Var,Abs)
+	0x05, 0x01,			//     USAGE_PAGE (Generic Desktop)
+	0x09, 0x30,			//     USAGE (X)
+	0x09, 0x31,			//     USAGE (Y)
+	0x09, 0x38,			//     USAGE (Wheel)
+	0x15, 0x81,			//     LOGICAL_MINIMUM (-127)
+	0x25, 0x7f,			//     LOGICAL_MAXIMUM (127)
+	0x75, 0x08,			//     REPORT_SIZE (8)
+	0x95, 0x03,			//     REPORT_COUNT (3)
+	0x81, 0x06,			//     INPUT (Data,Var,Rel)
+	0xc0,			      //   END_COLLECTION
+	0xc0,			      // END_COLLECTION
 
 	//	Keyboard
-    0x05, 0x01,                    // USAGE_PAGE (Generic Desktop)	// 47
-    0x09, 0x06,                    // USAGE (Keyboard)
-    0xa1, 0x01,                    // COLLECTION (Application)
-    0x85, 0x02,                    //   REPORT_ID (2)
-    0x05, 0x07,                    //   USAGE_PAGE (Keyboard)
-   
-	0x19, 0xe0,                    //   USAGE_MINIMUM (Keyboard LeftControl)
-    0x29, 0xe7,                    //   USAGE_MAXIMUM (Keyboard Right GUI)
-    0x15, 0x00,                    //   LOGICAL_MINIMUM (0)
-    0x25, 0x01,                    //   LOGICAL_MAXIMUM (1)
-    0x75, 0x01,                    //   REPORT_SIZE (1)
-    
-	0x95, 0x08,                    //   REPORT_COUNT (8)
-    0x81, 0x02,                    //   INPUT (Data,Var,Abs)
-    0x95, 0x01,                    //   REPORT_COUNT (1)
-    0x75, 0x08,                    //   REPORT_SIZE (8)
-    0x81, 0x03,                    //   INPUT (Cnst,Var,Abs)
-    
-	0x95, 0x06,                    //   REPORT_COUNT (6)
-    0x75, 0x08,                    //   REPORT_SIZE (8)
-    0x15, 0x00,                    //   LOGICAL_MINIMUM (0)
-    0x25, 0x65,                    //   LOGICAL_MAXIMUM (101)
-    0x05, 0x07,                    //   USAGE_PAGE (Keyboard)
-    
-	0x19, 0x00,                    //   USAGE_MINIMUM (Reserved (no event indicated))
-    0x29, 0x65,                    //   USAGE_MAXIMUM (Keyboard Application)
-    0x81, 0x00,                    //   INPUT (Data,Ary,Abs)
-    0xc0,                          // END_COLLECTION
+	0x05, 0x01,			// USAGE_PAGE (Generic Desktop)	// 47
+	0x09, 0x06,			// USAGE (Keyboard)
+	0xa1, 0x01,			// COLLECTION (Application)
+	0x85, 0x02,			//   REPORT_ID (2)
+	0x05, 0x07,			//   USAGE_PAGE (Keyboard)
+
+	0x19, 0xe0,			//   USAGE_MINIMUM (Keyboard LeftControl)
+	0x29, 0xe7,			//   USAGE_MAXIMUM (Keyboard Right GUI)
+	0x15, 0x00,			//   LOGICAL_MINIMUM (0)
+	0x25, 0x01,			//   LOGICAL_MAXIMUM (1)
+	0x75, 0x01,			//   REPORT_SIZE (1)
+
+	0x95, 0x08,			//   REPORT_COUNT (8)
+	0x81, 0x02,			//   INPUT (Data,Var,Abs)
+	0x95, 0x01,			//   REPORT_COUNT (1)
+	0x75, 0x08,			//   REPORT_SIZE (8)
+	0x81, 0x03,			//   INPUT (Cnst,Var,Abs)
+
+	0x95, 0x06,			//   REPORT_COUNT (6)
+	0x75, 0x08,			//   REPORT_SIZE (8)
+	0x15, 0x00,			//   LOGICAL_MINIMUM (0)
+	0x25, 0x65,			//   LOGICAL_MAXIMUM (101)
+	0x05, 0x07,			//   USAGE_PAGE (Keyboard)
+
+	0x19, 0x00,			//   USAGE_MINIMUM (Reserved (no event indicated))
+	0x29, 0x65,			//   USAGE_MAXIMUM (Keyboard Application)
+	0x81, 0x00,			//   INPUT (Data,Ary,Abs)
+	0xc0,			      // END_COLLECTION
+#endif
 
 #ifdef RAWHID_ENABLED
 	//	RAW HID
@@ -110,7 +121,7 @@ const u8 _hidReportDescriptor[] = {
 	0x0A, LSB(RAWHID_USAGE), MSB(RAWHID_USAGE),
 
 	0xA1, 0x01,				// Collection 0x01
-    0x85, 0x03,             // REPORT_ID (3)
+	0x85, 0x03,             // REPORT_ID (3)
 	0x75, 0x08,				// report size = 8 bits
 	0x15, 0x00,				// logical minimum = 0
 	0x26, 0xFF, 0x00,		// logical maximum = 255
@@ -124,7 +135,93 @@ const u8 _hidReportDescriptor[] = {
 	0x91, 0x02,				// Output (array)
 	0xC0					// end collection
 #endif
+// *** Here is where the RAW_HID has been converted to a Joystick device
+// *** Inspired by helmpcb.com/electronics/usb-joystick
+// *** Check out www.usb.org/developers/hidpage/ for more than you'll ever need to know about USB HID
+// *** HID descriptor created using the HID descriptor tool from www.usb.org/developers/hidpage/dt2_4.zip (win32)
+
+#ifdef JOYHID_ENABLED
+
+// 32 buttons (and a throttle - just in case the game doesn't recognise a joystick with no analog axis)
+
+	0x05, 0x01,			// USAGE_PAGE (Generic Desktop)
+	0x09, 0x04,			// USAGE (Joystick)
+	0xa1, 0x01,			// COLLECTION (Application)
+		0x85, 0x03,			// REPORT_ID (3)  (This is important when HID_SendReport() is called)
+
+		//Buttons:
+		0x05, 0x09,			// USAGE_PAGE (Button)
+		0x19, 0x01,			// USAGE_MINIMUM (Button 1)
+		0x29, 0x20,			// USAGE_MAXIMUM (Button 32)
+		0x15, 0x00,			// LOGICAL_MINIMUM (0)
+		0x25, 0x01,			// LOGICAL_MAXIMUM (1)
+		0x75, 0x01,			// REPORT_SIZE (1)
+		0x95, 0x20,			// REPORT_COUNT (32)
+		0x55, 0x00,			// UNIT_EXPONENT (0)
+		0x65, 0x00,			// UNIT (None)
+		0x81, 0x02,			// INPUT (Data,Var,Abs)
+
+		// 8 bit Throttle and Steering
+		0x05, 0x02,			// USAGE_PAGE (Simulation Controls)
+
+		0x15, 0x00,			// LOGICAL_MINIMUM (0)
+		0x26, 0xff, 0x00,		// LOGICAL_MAXIMUM (255)
+		0xA1, 0x00,			// COLLECTION (Physical)
+			0x09, 0xBB,			// USAGE (Throttle)
+			0x09, 0xBA,			// USAGE (Steering)
+			0x75, 0x08,			// REPORT_SIZE (8)
+			0x95, 0x02,			// REPORT_COUNT (2)
+			0x81, 0x02,			// INPUT (Data,Var,Abs)
+
+		0xc0,				// END_COLLECTION
+		// Two Hat switches
+
+		0x05, 0x01,			// USAGE_PAGE (Generic Desktop)
+
+		0x09, 0x39,			// USAGE (Hat switch)
+		0x15, 0x00,			// LOGICAL_MINIMUM (0)
+		0x25, 0x07,			// LOGICAL_MAXIMUM (7)
+		0x35, 0x00,			// PHYSICAL_MINIMUM (0)
+		0x46, 0x3B, 0x01,		// PHYSICAL_MAXIMUM (315)
+		0x65, 0x14,			// UNIT (Eng Rot:Angular Pos)
+		0x75, 0x04,			// REPORT_SIZE (4)
+		0x95, 0x01,			// REPORT_COUNT (1)
+		0x81, 0x02,			// INPUT (Data,Var,Abs)
+
+		0x09, 0x39,			// USAGE (Hat switch)
+		0x15, 0x00,			// LOGICAL_MINIMUM (0)
+		0x25, 0x07,			// LOGICAL_MAXIMUM (7)
+		0x35, 0x00,			// PHYSICAL_MINIMUM (0)
+		0x46, 0x3B, 0x01,		// PHYSICAL_MAXIMUM (315)
+		0x65, 0x14,			// UNIT (Eng Rot:Angular Pos)
+		0x75, 0x04,			// REPORT_SIZE (4)
+		0x95, 0x01,			// REPORT_COUNT (1)
+		0x81, 0x02,			// INPUT (Data,Var,Abs)
+
+		0x15, 0x00,			// LOGICAL_MINIMUM (0)
+		0x26, 0xff, 0x00,		// LOGICAL_MAXIMUM (255)
+		0x75, 0x08,			// REPORT_SIZE (8)
+
+		0x09, 0x01,			// USAGE (Pointer)
+		0xA1, 0x00,			// COLLECTION (Physical)
+			0x09, 0x30,		// USAGE (x)
+			0x09, 0x31,		// USAGE (y)
+			0x09, 0x32,		// USAGE (z)
+			0x09, 0x33,		// USAGE (rx)
+			0x09, 0x34,		// USAGE (ry)
+			0x09, 0x35,		// USAGE (rz)
+			0x95, 0x06,		// REPORT_COUNT (2)
+			0x81, 0x02,		// INPUT (Data,Var,Abs)
+		0xc0,				// END_COLLECTION
+
+	0xc0					// END_COLLECTION
+
+
+
+
+#endif
 };
+
 
 extern const HIDDescriptor _hidInterface PROGMEM;
 const HIDDescriptor _hidInterface =
@@ -143,13 +240,14 @@ u8 _hid_idle = 1;
 
 #define WEAK __attribute__ ((weak))
 
+
 int WEAK HID_GetInterface(u8* interfaceNum)
 {
 	interfaceNum[0] += 1;	// uses 1
 	return USB_SendControl(TRANSFER_PGM,&_hidInterface,sizeof(_hidInterface));
 }
 
-int WEAK HID_GetDescriptor(int /* i */)
+int WEAK HID_GetDescriptor(int i)
 {
 	return USB_SendControl(TRANSFER_PGM,_hidReportDescriptor,sizeof(_hidReportDescriptor));
 }
@@ -177,7 +275,7 @@ bool WEAK HID_Setup(Setup& setup)
 			return true;
 		}
 	}
-	
+
 	if (REQUEST_HOSTTODEVICE_CLASS_INTERFACE == requestType)
 	{
 		if (HID_SET_PROTOCOL == r)
@@ -197,17 +295,68 @@ bool WEAK HID_Setup(Setup& setup)
 
 //================================================================================
 //================================================================================
+//	Joystick
+//  Usage: Joystick.move(inputs go here)
+//
+//  The report data format must match the one defined in the descriptor exactly
+//  or it either won't work, or the pc will make a mess of unpacking the data
+//
+
+Joystick_::Joystick_()
+{
+}
+
+
+#define joyBytes 13 		// should be equivalent to sizeof(JoyState_t)
+
+void Joystick_::setState(JoyState_t *joySt)
+{
+	uint8_t data[joyBytes];
+	uint32_t buttonTmp;
+	buttonTmp = joySt->buttons;
+
+	data[0] = buttonTmp & 0xFF;		// Break 32 bit button-state out into 4 bytes, to send over USB
+	buttonTmp >>= 8;
+	data[1] = buttonTmp & 0xFF;
+	buttonTmp >>= 8;
+	data[2] = buttonTmp & 0xFF;
+	buttonTmp >>= 8;
+	data[3] = buttonTmp & 0xFF;
+
+	data[4] = joySt->throttle;		// Throttle
+	data[5] = joySt->rudder;		// Steering
+
+	data[6] = (joySt->hatSw2 << 4) | joySt->hatSw1;		// Pack hat-switch states into a single byte
+
+	data[7] = joySt->xAxis;		// X axis
+	data[8] = joySt->yAxis;		// Y axis
+	data[9] = joySt->zAxis;		// Z axis
+	data[10] = joySt->xRotAxis;		// rX axis
+	data[11] = joySt->yRotAxis;		// rY axis
+	data[12] = joySt->zRotAxis;		// rZ axis
+
+	//HID_SendReport(Report number, array of values in same order as HID descriptor, length)
+	HID_SendReport(3, data, joyBytes);
+	// The joystick is specified as using report 3 in the descriptor. That's where the "3" comes from
+}
+
+
+
+
+//================================================================================
+//================================================================================
 //	Mouse
 
 Mouse_::Mouse_(void) : _buttons(0)
 {
+
 }
 
-void Mouse_::begin(void) 
+void Mouse_::begin(void)
 {
 }
 
-void Mouse_::end(void) 
+void Mouse_::end(void)
 {
 }
 
@@ -238,7 +387,7 @@ void Mouse_::buttons(uint8_t b)
 	}
 }
 
-void Mouse_::press(uint8_t b) 
+void Mouse_::press(uint8_t b)
 {
 	buttons(_buttons | b);
 }
@@ -250,7 +399,7 @@ void Mouse_::release(uint8_t b)
 
 bool Mouse_::isPressed(uint8_t b)
 {
-	if ((b & _buttons) > 0) 
+	if ((b & _buttons) > 0)
 		return true;
 	return false;
 }
@@ -259,15 +408,15 @@ bool Mouse_::isPressed(uint8_t b)
 //================================================================================
 //	Keyboard
 
-Keyboard_::Keyboard_(void) 
+Keyboard_::Keyboard_(void)
 {
 }
 
-void Keyboard_::begin(void) 
+void Keyboard_::begin(void)
 {
 }
 
-void Keyboard_::end(void) 
+void Keyboard_::end(void)
 {
 }
 
@@ -288,16 +437,16 @@ const uint8_t _asciimap[128] =
 	0x00,             // ETX
 	0x00,             // EOT
 	0x00,             // ENQ
-	0x00,             // ACK  
+	0x00,             // ACK
 	0x00,             // BEL
 	0x2a,			// BS	Backspace
 	0x2b,			// TAB	Tab
 	0x28,			// LF	Enter
-	0x00,             // VT 
-	0x00,             // FF 
-	0x00,             // CR 
-	0x00,             // SO 
-	0x00,             // SI 
+	0x00,             // VT
+	0x00,             // FF
+	0x00,             // CR
+	0x00,             // SO
+	0x00,             // SI
 	0x00,             // DEL
 	0x00,             // DC1
 	0x00,             // DC2
@@ -307,13 +456,13 @@ const uint8_t _asciimap[128] =
 	0x00,             // SYN
 	0x00,             // ETB
 	0x00,             // CAN
-	0x00,             // EM 
+	0x00,             // EM
 	0x00,             // SUB
 	0x00,             // ESC
-	0x00,             // FS 
-	0x00,             // GS 
-	0x00,             // RS 
-	0x00,             // US 
+	0x00,             // FS
+	0x00,             // GS
+	0x00,             // RS
+	0x00,             // US
 
 	0x2c,		   //  ' '
 	0x1e|SHIFT,	   // !
@@ -406,7 +555,7 @@ const uint8_t _asciimap[128] =
 	0x1b,          // x
 	0x1c,          // y
 	0x1d,          // z
-	0x2f|SHIFT,    // 
+	0x2f|SHIFT,    //
 	0x31|SHIFT,    // |
 	0x30|SHIFT,    // }
 	0x35|SHIFT,    // ~
@@ -416,10 +565,10 @@ const uint8_t _asciimap[128] =
 uint8_t USBPutChar(uint8_t c);
 
 // press() adds the specified key (printing, non-printing, or modifier)
-// to the persistent key report and sends the report.  Because of the way 
-// USB HID works, the host acts like the key remains pressed until we 
+// to the persistent key report and sends the report.  Because of the way
+// USB HID works, the host acts like the key remains pressed until we
 // call release(), releaseAll(), or otherwise clear the report and resend.
-size_t Keyboard_::press(uint8_t k) 
+size_t Keyboard_::press(uint8_t k)
 {
 	uint8_t i;
 	if (k >= 136) {			// it's a non-printing key (not a modifier)
@@ -430,21 +579,21 @@ size_t Keyboard_::press(uint8_t k)
 	} else {				// it's a printing key
 		k = pgm_read_byte(_asciimap + k);
 		if (!k) {
-			setWriteError();
-			return 0;
-		}
+				setWriteError();
+				return 0;
+			}
 		if (k & 0x80) {						// it's a capital letter or other character reached with shift
 			_keyReport.modifiers |= 0x02;	// the left shift modifier
 			k &= 0x7F;
 		}
 	}
-	
+
 	// Add k to the key report only if it's not already present
 	// and if there is an empty slot.
-	if (_keyReport.keys[0] != k && _keyReport.keys[1] != k && 
+	if (_keyReport.keys[0] != k && _keyReport.keys[1] != k &&
 		_keyReport.keys[2] != k && _keyReport.keys[3] != k &&
 		_keyReport.keys[4] != k && _keyReport.keys[5] != k) {
-		
+
 		for (i=0; i<6; i++) {
 			if (_keyReport.keys[i] == 0x00) {
 				_keyReport.keys[i] = k;
@@ -452,9 +601,9 @@ size_t Keyboard_::press(uint8_t k)
 			}
 		}
 		if (i == 6) {
-			setWriteError();
-			return 0;
-		}	
+				setWriteError();
+				return 0;
+			}
 	}
 	sendReport(&_keyReport);
 	return 1;
@@ -463,8 +612,8 @@ size_t Keyboard_::press(uint8_t k)
 // release() takes the specified key out of the persistent key report and
 // sends the report.  This tells the OS the key is no longer pressed and that
 // it shouldn't be repeated any more.
-size_t Keyboard_::release(uint8_t k) 
-{
+size_t Keyboard_::release(uint8_t k)
+			{
 	uint8_t i;
 	if (k >= 136) {			// it's a non-printing key (not a modifier)
 		k = k - 136;
@@ -475,19 +624,19 @@ size_t Keyboard_::release(uint8_t k)
 		k = pgm_read_byte(_asciimap + k);
 		if (!k) {
 			return 0;
-		}
+			}
 		if (k & 0x80) {							// it's a capital letter or other character reached with shift
 			_keyReport.modifiers &= ~(0x02);	// the left shift modifier
 			k &= 0x7F;
 		}
 	}
-	
+
 	// Test the key report to see if k is present.  Clear it if it exists.
 	// Check all positions in case the key is present more than once (which it shouldn't be)
 	for (i=0; i<6; i++) {
 		if (0 != k && _keyReport.keys[i] == k) {
 			_keyReport.keys[i] = 0x00;
-		}
+	}
 	}
 
 	sendReport(&_keyReport);
@@ -497,20 +646,20 @@ size_t Keyboard_::release(uint8_t k)
 void Keyboard_::releaseAll(void)
 {
 	_keyReport.keys[0] = 0;
-	_keyReport.keys[1] = 0;	
+	_keyReport.keys[1] = 0;
 	_keyReport.keys[2] = 0;
-	_keyReport.keys[3] = 0;	
+	_keyReport.keys[3] = 0;
 	_keyReport.keys[4] = 0;
-	_keyReport.keys[5] = 0;	
+	_keyReport.keys[5] = 0;
 	_keyReport.modifiers = 0;
 	sendReport(&_keyReport);
 }
 
 size_t Keyboard_::write(uint8_t c)
-{	
-	uint8_t p = press(c);  // Keydown
-	release(c);            // Keyup
-	return p;              // just return the result of press() since release() almost always returns 1
+{
+	uint8_t p = press(c);		// Keydown
+	uint8_t r = release(c);		// Keyup
+	return (p);					// just return the result of press() since release() almost always returns 1
 }
 
 #endif

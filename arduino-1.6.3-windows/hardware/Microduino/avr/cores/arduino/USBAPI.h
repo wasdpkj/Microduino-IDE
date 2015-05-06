@@ -1,41 +1,9 @@
-/*
-  USBAPI.h
-  Copyright (c) 2005-2014 Arduino.  All right reserved.
 
-  This library is free software; you can redistribute it and/or
-  modify it under the terms of the GNU Lesser General Public
-  License as published by the Free Software Foundation; either
-  version 2.1 of the License, or (at your option) any later version.
-
-  This library is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-  Lesser General Public License for more details.
-
-  You should have received a copy of the GNU Lesser General Public
-  License along with this library; if not, write to the Free Software
-  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-*/
 
 #ifndef __USBAPI__
 #define __USBAPI__
 
-#include <inttypes.h>
-#include <avr/pgmspace.h>
-#include <avr/eeprom.h>
-#include <avr/interrupt.h>
-#include <util/delay.h>
-
-typedef unsigned char u8;
-typedef unsigned short u16;
-typedef unsigned long u32;
-
-#include "Arduino.h"
-
 #if defined(USBCON)
-
-#include "USBDesc.h"
-#include "USBCore.h"
 
 //================================================================================
 //================================================================================
@@ -57,40 +25,60 @@ extern USBDevice_ USBDevice;
 //================================================================================
 //	Serial over CDC (Serial1 is the physical port)
 
-struct ring_buffer;
-
-#if (RAMEND < 1000)
-#define SERIAL_BUFFER_SIZE 16
-#else
-#define SERIAL_BUFFER_SIZE 64
-#endif
-
 class Serial_ : public Stream
 {
 private:
-	int peek_buffer;
+	ring_buffer *_cdc_rx_buffer;
 public:
-	Serial_() { peek_buffer = -1; };
-	void begin(unsigned long);
-	void begin(unsigned long, uint8_t);
+	void begin(uint16_t baud_count);
 	void end(void);
 
 	virtual int available(void);
+	virtual void accept(void);
 	virtual int peek(void);
 	virtual int read(void);
 	virtual void flush(void);
 	virtual size_t write(uint8_t);
-	virtual size_t write(const uint8_t*, size_t);
-	using Print::write; // pull in write(str) and write(buf, size) from Print
 	operator bool();
-
-	volatile uint8_t _rx_buffer_head;
-	volatile uint8_t _rx_buffer_tail;
-	unsigned char _rx_buffer[SERIAL_BUFFER_SIZE];
 };
 extern Serial_ Serial;
 
-#define HAVE_CDCSERIAL
+//================================================================================
+//================================================================================
+//	Joystick
+//  Implemented in HID.cpp
+//  The list of parameters here needs to match the implementation in HID.cpp
+
+
+typedef struct JoyState 		// Pretty self explanitory. Simple state to store all the joystick parameters
+{
+	uint8_t		xAxis;
+	uint8_t		yAxis;
+	uint8_t		zAxis;
+
+	uint8_t		xRotAxis;
+	uint8_t		yRotAxis;
+	uint8_t		zRotAxis;
+
+	uint8_t		throttle;
+	uint8_t		rudder;
+
+	uint8_t		hatSw1;
+	uint8_t		hatSw2;
+
+	uint32_t	buttons;		// 32 general buttons
+
+} JoyState_t;
+
+class Joystick_
+{
+public:
+	Joystick_();
+
+	void setState(JoyState_t *joySt);
+
+};
+extern Joystick_ Joystick;
 
 //================================================================================
 //================================================================================
@@ -111,7 +99,7 @@ public:
 	void begin(void);
 	void end(void);
 	void click(uint8_t b = MOUSE_LEFT);
-	void move(signed char x, signed char y, signed char wheel = 0);	
+	void move(signed char x, signed char y, signed char wheel = 0);
 	void press(uint8_t b = MOUSE_LEFT);		// press LEFT by default
 	void release(uint8_t b = MOUSE_LEFT);	// release LEFT by default
 	bool isPressed(uint8_t b = MOUSE_LEFT);	// check LEFT by default
