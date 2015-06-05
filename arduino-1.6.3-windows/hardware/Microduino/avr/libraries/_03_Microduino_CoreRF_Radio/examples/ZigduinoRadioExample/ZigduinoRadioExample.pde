@@ -7,25 +7,69 @@ Watch the Rx Zigduino output what you've input into the serial port of the Tx Zi
 
 #include <ZigduinoRadio.h>
 
-String p = "{\"STA\":\"0\",\"TY\":\"1\",\"ID\":\"999999\",\"DIR\":{\"E\":\"66\",\"W\":\"77\",\"S\":\"88\",\"N\":\"99\"},\"VIS\":{\"E\":\"0\",\"W\":\"1\",\"S\":\"0\",\"N\":\"1\"},\"CK\":\"MD\"}";
 void setup()
 {
   ZigduinoRadio.begin(11);
-  Serial.begin(115200);
-
-  //  ZigduinoRadio.attachError(errHandle);
-  //  ZigduinoRadio.attachTxDone(onXmitDone);
-  ZigduinoRadio.beginTransmission();
-
-  for (int a = 0; a < p.length(); a++)
-  {
-    ZigduinoRadio.write(p[a]);
-    delay(2);
-  }
-  ZigduinoRadio.endTransmission();
-
+  Serial.begin(9600);
+  
+  ZigduinoRadio.attachError(errHandle);
+  ZigduinoRadio.attachTxDone(onXmitDone);
 }
 
 void loop()
 {
+  if (Serial.available())
+  {
+    ZigduinoRadio.beginTransmission();
+    
+    Serial.println();
+    Serial.print("Tx: ");
+    
+    while(Serial.available())
+    {
+      char c = Serial.read();
+      Serial.write(c);
+      ZigduinoRadio.write(c);
+    }
+    
+    Serial.println(); 
+    
+    ZigduinoRadio.endTransmission();
+  }
+  
+  if (ZigduinoRadio.available())
+  {
+    Serial.println();
+    Serial.print("Rx: ");
+    
+    while(ZigduinoRadio.available())
+      Serial.write(ZigduinoRadio.read());
+      
+    Serial.println();
+    Serial.print("LQI: ");
+    Serial.print(ZigduinoRadio.getLqi(), 10);
+    Serial.print(", RSSI: ");
+    Serial.print(ZigduinoRadio.getLastRssi(), 10);
+    Serial.print(" dBm, ED: ");
+    Serial.print(ZigduinoRadio.getLastEd(), 10);
+    Serial.println("dBm");
+  }
+  
+  delay(100);
+}
+
+void errHandle(radio_error_t err)
+{
+  Serial.println();
+  Serial.print("Error: ");
+  Serial.print((uint8_t)err, 10);
+  Serial.println();
+}
+
+void onXmitDone(radio_tx_done_t x)
+{
+  Serial.println();
+  Serial.print("TxDone: ");
+  Serial.print((uint8_t)x, 10);
+  Serial.println();
 }
