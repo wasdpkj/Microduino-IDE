@@ -3,11 +3,9 @@
 Adafruit_GPS GPS(&Serial1);
 
 void setup() {
-  while (!Serial);
   Serial.begin(115200);
   GPS.begin(38400);  //9600/19200/38400/57600/115200
 }
-
 
 void loop() {
   if (Serial.available()) {
