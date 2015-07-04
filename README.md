@@ -1,5 +1,16 @@
 ﻿Microduino-IDE
 ==============
+Microduino IDE for Mac：
+https://github.com/wasdpkj/Microduino-IDE-mac/
+
+Microduino IDE for Win：
+https://github.com/wasdpkj/Microduino-IDE-win/
+
+Microduino IDE Support：
+https://github.com/wasdpkj/Microduino-IDE-Support/
+
+==============
+
 Microduino wiki:
 http://wiki.microduino.cc
 
