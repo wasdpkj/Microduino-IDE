@@ -3,8 +3,8 @@
 Microduino Getting start:
 http://www.microduino.cc/download/
 
-Microduino IDE for Mac：
-https://github.com/wasdpkj/Microduino-IDE-mac/
+Microduino IDE for Win：
+https://github.com/wasdpkj/Microduino-IDE-win/
 
 Microduino IDE Support：
 https://github.com/wasdpkj/Microduino-IDE-Support/
